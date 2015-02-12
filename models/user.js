@@ -2,20 +2,9 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('fse.db');
 
 function User() {
-  var username;
-  var password;
-  var confirm;
-  var status;
 
-  this.init = function (name, ps, con) {
-    username = name;
-    password = ps;
-    confirm = con;
-    status = "on";
-  }
-
-  this.logout = function() {
-    status = "off";
+  this.logout = function(username) {
+    var status = "off";
     var stmt = db.prepare("UPDATE userInfo SET status=? where username=?");
     stmt.run(status,username);
     stmt.finalize();
@@ -25,7 +14,8 @@ function User() {
       });
   }
 
-  this.login = function(res) {
+  this.login = function(res, username, password, confirm) {
+    var status = "on";
 
     if (username.length < 3) {
       res.render('index', {message: 'Username is too short'});
