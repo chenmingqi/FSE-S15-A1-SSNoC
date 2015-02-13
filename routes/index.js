@@ -13,8 +13,9 @@ router.get('/login', function(req, res, next) {
 
 router.get('/logout/:username', function(req, res) {
   var username = req.params.username;
-  user.logout(username);
-  res.render('index', {message: "You successfully log out!"});
+  user.logout(username, function() {
+    res.render('index', {message: "You successfully log out!"});
+  });
 });
 
 
@@ -23,7 +24,14 @@ router.post('/login', function(req, res) {
   var password = req.body.password;
   var confirm = req.body.confirm;
 
-  user.login(res,username,password,confirm);
+  user.login(username,password,confirm, function(result) {
+    if(result.message) {
+      res.render(result.page, {message: result.message});
+    }
+    else {
+      res.render(result.page, {name: result.username});
+    }
+  });
 });
 
 
