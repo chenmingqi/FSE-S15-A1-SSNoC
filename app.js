@@ -25,9 +25,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 
 
+/*Socket.io backend */
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
@@ -38,7 +38,6 @@ io.on('connection', function(socket){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
