@@ -18,8 +18,10 @@
 
     <h1>Welcome, <%= name %>!</h1>
     <a href="/logout/<%= name %>">log out</a>
+    <input style="visibility:hidden;" value="<%= name %>" id="username">
 
-    <h2>Let's chat!</h2>
+    <br>
+    <br>
 
     <ul id="messages"></ul>
     <form action="">
@@ -36,6 +38,8 @@
         return false;
       });
       socket.on('chat message', function(msg){
+        var username = $('#username').val();
+        $('#messages').append($('<li>').text(username));
         $('#messages').append($('<li>').text(msg));
       });
     </script>
