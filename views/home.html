@@ -29,15 +29,25 @@
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+
+      //intiate the socket.io object
       var socket = io();
       $('form').submit(function(){
+
+        //emit param: url and the value.
         socket.emit('chat message', $('#m').val());
+
+        //empty the chatting input field
         $('#m').val('');
+        
         return false;
       });
+
+      //listener, url, val, callback function.
       socket.on('chat message', function(msg){
         $('#messages').append($('<li>').text(msg));
       });
+
     </script>
   </body>
 </html>
