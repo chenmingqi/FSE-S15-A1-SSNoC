@@ -33,6 +33,10 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
+
+  socket.on('join community', function(username) {
+    io.emit('join community', username);
+  });
 });
 
 http.listen(3000, function(){

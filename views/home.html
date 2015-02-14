@@ -20,6 +20,8 @@
     <a href="/logout/<%= name %>">log out</a>
     <input style="visibility:hidden;" value="<%= name %>" id="username">
 
+    <p id="online">Online: </p>
+
     <br>
     <br>
 
@@ -32,15 +34,23 @@
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
+      socket.emit('join community', $('#username').val());
+
       $('form').submit(function(){
         socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
       });
+
+      socket.on('join community', function(username) {
+        $('#online').append(username + ' ');
+        return false;
+      });
+
       socket.on('chat message', function(msg){
         var username = $('#username').val();
-        var todayDate=new Date();
-        var format ="AM";
+        var todayDate = new Date();
+        var format = "AM";
         var hour=todayDate.getHours();
         var min=todayDate.getMinutes();
         if (hour>11){format="PM";}
