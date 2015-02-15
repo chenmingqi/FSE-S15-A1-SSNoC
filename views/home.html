@@ -20,7 +20,9 @@
     <a href="/logout/<%= name %>">log out</a>
     <input style="visibility:hidden;" value="<%= name %>" id="username">
 
-    <p id="online">Online: </p>
+    <p id="online"></p>
+    <p id='offline'></p>
+
 
     <br>
     <br>
@@ -34,21 +36,34 @@
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
-      socket.emit('join community', $('#username').val());
+      var userlist = {on: <%- on %>, off: <%- off %>};
+      socket.emit('update userlist', userlist);
 
       $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
+        socket.emit('chat message', [$('#username').val(), $('#m').val()]);
         $('#m').val('');
         return false;
       });
 
-      socket.on('join community', function(username) {
-        $('#online').append(username + ' ');
+      socket.on('update userlist', function(userlist) {
+        var onlist = '';
+        var offlist = '';
+
+        for(var i = 0; i < userlist.on.length; i++) {
+          onlist += userlist.on[i] + ' ';
+        }
+
+        for(var i = 0; i < userlist.off.length; i++) {
+          offlist += userlist.off[i] + ' ';
+        }
+
+        $('#online').text("Online: " + onlist);
+        $('#offline').text("Offline: " + offlist);
+
         return false;
       });
 
-      socket.on('chat message', function(msg){
-        var username = $('#username').val();
+      socket.on('chat message', function(data){
         var todayDate = new Date();
         var format = "AM";
         var hour=todayDate.getHours();
@@ -59,8 +74,8 @@
         if (min < 10){min = "0" + min;}
         var timestamp = todayDate.getMonth()+1 + "/" + todayDate.getDate() + "/" +  todayDate.getFullYear()+" "+hour+":"+min+" "+format;
 
-        $('#messages').append($('<li>').text(timestamp + ", " + username + ":"));
-        $('#messages').append($('<li>').text(msg));
+        $('#messages').append($('<li>').text(timestamp + ", " + data[0] + ":"));
+        $('#messages').append($('<li>').text(data[1]));
       });
     </script>
   </body>

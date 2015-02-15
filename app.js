@@ -30,12 +30,12 @@ var io = require('socket.io')(http);
 
 
 io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  socket.on('chat message', function(data){
+    io.emit('chat message', data);
   });
 
-  socket.on('join community', function(username) {
-    io.emit('join community', username);
+  socket.on('update userlist', function(userlist) {
+    io.emit('update userlist', userlist);
   });
 });
 
