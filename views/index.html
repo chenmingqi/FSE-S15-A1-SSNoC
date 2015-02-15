@@ -5,6 +5,16 @@
      <br>
   <% } %>
 
-<a href="/login">log in</a>
+  <a href="/login">log in</a>
+
+  <% if(typeof(on) !== 'undefined') {%>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      var userlist = {on: <%- on %>, off: <%- off %>};
+      socket.emit('update userlist', userlist);
+    </script>
+  <% } %>
 <body>
 </html>

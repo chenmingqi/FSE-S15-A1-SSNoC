@@ -14,7 +14,9 @@ router.get('/login', function(req, res, next) {
 router.get('/logout/:username', function(req, res) {
   var username = req.params.username;
   user.logout(username, function() {
-    res.render('index', {message: "You successfully log out!"});
+    user.getStatus(function(userlist) {
+      res.render('index', {message: "You successfully log out!", on: JSON.stringify(userlist.on), off: JSON.stringify(userlist.off) });
+    });
   });
 });
 
@@ -29,8 +31,11 @@ router.post('/login', function(req, res) {
       res.render(result.page, {message: result.message});
     }
     else {
-      res.render(result.page, {name: result.username});
+      user.getStatus(function(userlist) {
+        res.render(result.page, {name: result.username, on: JSON.stringify(userlist.on), off: JSON.stringify(userlist.off)} );
+      });
     }
+
   });
 });
 
