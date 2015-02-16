@@ -4,10 +4,12 @@ var User = require('../models/user');
 var user = new User();
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log("main "+req.session.passport.user);
   res.render('index', { message: 'Welcome to Survivable Social Network on a Chip' });
 });
 
 router.get('/login', function(req, res, next) {
+  console.log("login "+req.session.passport.user);
   res.render('login');
 });
 
@@ -21,7 +23,7 @@ router.get('/logout/:username', function(req, res) {
 });
 
 router.get('/home', function(req, res, next) {
-  console.log("home page "+req.session.passport.user);
+  console.log("home page "+req.session.passport.user.id);
   res.render('test');
 });
 

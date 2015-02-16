@@ -9,6 +9,27 @@ var routes = require('./routes/index');
 
 var app = express();
 
+
+
+//Sequelize settings
+var Sequelize = require('sequelize')
+  , sequelize = new Sequelize('fse.db', 'root', '', {
+      dialect: "sqlite", // or 'sqlite', 'postgres', 'mariadb'
+      port:    3306, // or 5432 (for postgres)
+    })
+ 
+sequelize
+  .authenticate()
+  .complete(function(err) {
+    if (!!err) {
+      console.log('Unable to connect to the database:', err)
+    } else {
+      console.log('Connection has been established successfully.')
+    }
+  })
+
+
+
 //passport settings
 var passport = require('passport')
 var session = require( "express-session" );
@@ -45,7 +66,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 //this make the req.user.id available
 passport.serializeUser(function(user, done) {
   console.log("serializeUser"+user);
-  return done(null, user.username);
+  return done(null, user);
 });
 
 passport.deserializeUser(function(id, done) {
