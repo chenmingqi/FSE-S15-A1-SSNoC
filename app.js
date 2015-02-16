@@ -28,7 +28,44 @@ sequelize
     }
   })
 
+//define model
+var Chat = sequelize.define('Chat', {
+  content: Sequelize.STRING,
+  author: Sequelize.STRING
+})
 
+sequelize
+  .sync({ force: true })
+  .complete(function(err) {
+     if (!!err) {
+       console.log('An error occurred while creating the table:', err)
+     } else {
+       console.log('It worked!')
+     }
+  })
+
+  //create instance
+  Chat
+    .create({
+      content: 'john-doe',
+      author: "peny"
+    })
+    .complete(function(err, user) {
+
+    })
+
+  //retrive instance
+  Chat
+  .find({ where: { content: 'john-doe' } })
+  .complete(function(err, new_chat) {
+    if (!!err) {
+      console.log('An error occurred while searching for John:', err)
+    } else if (!new_chat) {
+      console.log('No user with the username "john-doe" has been found.')
+    } else {
+      console.log('Hello ' + new_chat.author + '!')
+    }
+  })
 
 //passport settings
 var passport = require('passport')
