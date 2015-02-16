@@ -9,6 +9,58 @@ var routes = require('./routes/index');
 
 var app = express();
 
+//passport settings
+var passport = require('passport')
+var session = require( "express-session" );
+app.use(session({secret: 'mingqi', 
+                 saveUninitialized: true,
+                 resave: true}));
+app.use(passport.initialize());
+
+var crypto = require('crypto');
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('fse.db');
+var passport = require('passport')
+var LocalStrategy = require('passport-local').Strategy;
+
+// function hashPassword(password, salt) {
+//   var hash = crypto.createHash('sha256');
+//   hash.update(password);
+//   hash.update(salt);
+//   return hash.digest('hex');
+// }
+passport.use(new LocalStrategy(function(username, password, done) {
+  db.get('SELECT salt FROM users WHERE username = ?', username, function(err, row) {
+    console.log(username);
+    console.log(password);
+    if (!row) return done(null, false);
+    // var hash = hashPassword(password, row.salt);
+    db.get('SELECT username, id FROM users WHERE username = ? AND password = ?', username, password, function(err, row) {
+      if (!row) return done(null, false);
+      return done(null, row);
+    });
+  });
+}));
+
+//this make the req.user.id available
+passport.serializeUser(function(user, done) {
+  console.log("serializeUser"+user);
+  return done(null, user.username);
+});
+
+passport.deserializeUser(function(id, done) {
+  console.log("deserializeUser"+id);
+  db.get('SELECT id, username FROM users WHERE id = ?', id, function(err, row) {
+    if (!row) return done(null, false);
+    return done(null, row);
+  });
+});
+
+
+
+
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
@@ -20,6 +72,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
@@ -73,52 +126,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-// //passport login
-// var crypto = require('crypto');
-// var sqlite3 = require('sqlite3').verbose();
-// var db = new sqlite3.Database('fse.db');
-// var passport = require('passport')
-// var LocalStrategy = require('passport-local').Strategy;
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// app.post('/passport_login',
-//   passport.authenticate('local', {
-//     successRedirect: '/loginSuccess',
-//     failureRedirect: '/loginFailure'
-//   })
-// );
-
-// // function hashPassword(password, salt) {
-// //   var hash = crypto.createHash('sha256');
-// //   hash.update(password);
-// //   hash.update(salt);
-// //   return hash.digest('hex');
-// // }
-// passport.use(new LocalStrategy(function(username, password, done) {
-//   db.get('SELECT salt FROM users WHERE username = ?', username, function(err, row) {
-//     console.log(username);
-//     console.log(password);
-//     if (!row) return done(null, false);
-//     // var hash = hashPassword(password, row.salt);
-//     db.get('SELECT username, id FROM users WHERE username = ? AND password = ?', username, password, function(err, row) {
-//       if (!row) return done(null, false);
-//       return done(null, row);
-//     });
-//   });
-// }));
-
-// passport.serializeUser(function(user, done) {
-//   return done(null, user.id);
-// });
-
-// passport.deserializeUser(function(id, done) {
-//   db.get('SELECT id, username FROM users WHERE id = ?', id, function(err, row) {
-//     if (!row) return done(null, false);
-//     return done(null, row);
-//   });
-// });
 
 module.exports = app;
