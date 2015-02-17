@@ -42,7 +42,6 @@
       // socket.emit('update userlist', userlist);
 
       $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
         socket.emit('chat message', [$('#username').val(), $('#m').val()]);
         $('#m').val('');
         return false;
