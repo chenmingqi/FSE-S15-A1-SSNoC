@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -12,12 +13,40 @@
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
     </style>
+    <!--<link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
+      <link rel="stylesheet" href="css/main.css">
+
+      <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
 
   </head>
   <body>
 
-    <h1>Welcome, <%= name %>!</h1>
-    <a href="/logout/<%= name %>">log out</a>
+      <!-- Content -->
+       <div class="row-fluid">
+     <!-- Header -->
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="navbar navbar-inverse navbar-fixed-top">
+                        <div class="navbar-inner">
+                                <a class="navbar-brand" href="#">Chat Room</a>
+
+
+                                <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/logout/<%= name %>">log out&nbsp;&nbsp;&nbsp;</a></li>
+            </ul>
+         
+        </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Header -->
+    
+    <div class="row-fluid" >
+
+   
 
     <h2>Let's chat!</h2>
 
@@ -26,6 +55,13 @@
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 
+    </div>
+
+    </div>
+    <!-- End Content -->
+
+
+  
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
