@@ -21,4 +21,9 @@ router.get('/home',function(req,res){
 	res.render('home',{user:user, on:on, off:off});
 });
 
+router.get('/logout',function(req,res){
+  	req.logout();
+  	res.redirect('/');
+});
+
 module.exports = router;
