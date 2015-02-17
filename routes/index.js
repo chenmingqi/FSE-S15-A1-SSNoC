@@ -55,5 +55,4 @@ router.post('/passport_login',
   })
 );
 
-
 module.exports = router;
