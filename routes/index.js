@@ -2,14 +2,15 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var user = new User();
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log("main "+req.session.passport.user);
+  // console.log("main "+req.session.passport.user);
   res.render('index', { message: 'Welcome to Survivable Social Network on a Chip' });
 });
 
 router.get('/login', function(req, res, next) {
-  console.log("login "+req.session.passport.user);
+  // console.log("login "+req.session.passport.user);
   res.render('login');
 });
 
@@ -23,7 +24,7 @@ router.get('/logout/:username', function(req, res) {
 });
 
 router.get('/home', function(req, res, next) {
-  console.log("home page "+req.session.passport.user.id);
+  // console.log("home page "+req.session.passport.user.id);
   res.render('test');
 });
 
@@ -45,9 +46,8 @@ router.get('/home', function(req, res, next) {
 //   });
 // });
 
-
 //passport login
-var passport = require('passport')
+var passport = require('passport');
 router.post('/passport_login',
   passport.authenticate('local', {
     successRedirect: '/home/',

@@ -4,72 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
-
 var app = express();
 
-
-
-//Sequelize settings
-var Sequelize = require('sequelize')
-  , sequelize = new Sequelize('fse.db', 'root', '', {
-      dialect: "sqlite", // or 'sqlite', 'postgres', 'mariadb'
-      port:    3306, // or 5432 (for postgres)
-    })
- 
-sequelize
-  .authenticate()
-  .complete(function(err) {
-    if (!!err) {
-      console.log('Unable to connect to the database:', err)
-    } else {
-      console.log('Connection has been established successfully.')
-    }
-  })
-
-//define model
-var Chat = sequelize.define('Chat', {
-  content: Sequelize.STRING,
-  author: Sequelize.STRING
-})
-
-sequelize
-  .sync({ force: true })
-  .complete(function(err) {
-     if (!!err) {
-       console.log('An error occurred while creating the table:', err)
-     } else {
-       console.log('It worked!')
-     }
-  })
-
-  //create instance
-  Chat
-    .create({
-      content: 'john-doe',
-      author: "peny"
-    })
-    .complete(function(err, user) {
-
-    })
-
-  //retrive instance
-  Chat
-  .find({ where: { content: 'john-doe' } })
-  .complete(function(err, new_chat) {
-    if (!!err) {
-      console.log('An error occurred while searching for John:', err)
-    } else if (!new_chat) {
-      console.log('No user with the username "john-doe" has been found.')
-    } else {
-      console.log('Hello ' + new_chat.author + '!')
-    }
-  })
-
 //passport settings
-var passport = require('passport')
+var passport = require('passport');
 var session = require( "express-session" );
+
 app.use(session({secret: 'mingqi', 
                  saveUninitialized: true,
                  resave: true}));
@@ -78,7 +19,7 @@ app.use(passport.initialize());
 var crypto = require('crypto');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('fse.db');
-var passport = require('passport')
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 // function hashPassword(password, salt) {
@@ -87,18 +28,55 @@ var LocalStrategy = require('passport-local').Strategy;
 //   hash.update(salt);
 //   return hash.digest('hex');
 // }
-passport.use(new LocalStrategy(function(username, password, done) {
-  db.get('SELECT salt FROM users WHERE username = ?', username, function(err, row) {
-    console.log(username);
-    console.log(password);
-    if (!row) return done(null, false);
-    // var hash = hashPassword(password, row.salt);
-    db.get('SELECT username, id FROM users WHERE username = ? AND password = ?', username, password, function(err, row) {
-      if (!row) return done(null, false);
-      return done(null, row);
+
+
+// passport.use(new LocalStrategy(function(username, password, done) {
+//   // db.get('SELECT salt FROM users WHERE username = ?', username, function(err, row) {
+//   //   console.log(username);
+//   //   console.log(password);
+//   //   if (!row) return done(null, false);
+//   //   // var hash = hashPassword(password, row.salt);
+//   //   db.get('SELECT username, id FROM users WHERE username = ? AND password = ?', username, password, function(err, row) {
+//   //     if (!row) return done(null, false);
+//   //     return done(null, row);
+//   //   });
+//   // });
+//   console.log("here");
+//   User
+//   .find({ where: { username: username, password: password } })
+//   .complete(function(err, login_user) {
+//     if (!!err) {
+//       console.log('An error occurred', err);
+//     } else if (!login_user) {
+//       console.log('No user with the username has been found.');
+//     } else {
+//       console.log('Hello ' + login_user.username + '!');
+//       return done(null, login_user);
+//     }
+//   })
+// }));
+
+var User = require("./models/models");
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    console.log("LocalStrategy");
+    User.find({ where: { username: username }}).success(function(user) {
+      if (!user) {
+        console.log("!user");
+        done(null, false, { message: 'Unknown user' });
+      } else if (password != user.password) {
+        console.log("Invalid password");
+        done(null, false, { message: 'Invalid password'});
+      } else {
+        console.log("done");
+        done(null, user);
+      }
+    }).error(function(err){
+      console.log("err");
+      done(err);
     });
-  });
-}));
+  }
+));
 
 //this make the req.user.id available
 passport.serializeUser(function(user, done) {
