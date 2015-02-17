@@ -16,9 +16,9 @@
   </head>
   <body>
 
-    <h1>Welcome, <%= name %>!</h1>
-    <a href="/logout/<%= name %>">log out</a>
-    <input style="visibility:hidden;" value="<%= name %>" id="username">
+    <h1>Welcome, <%= user.username %>!</h1>
+    <a href="/logout/<%= user.username %>">log out</a>
+    <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
     <p id="online"></p>
     <p id='offline'></p>

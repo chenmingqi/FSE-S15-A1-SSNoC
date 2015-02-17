@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
-var user = new User();
+// var User = require('../models/user');
+var User = require('../models/models');
+// var user = new User();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,18 +15,30 @@ router.get('/login', function(req, res, next) {
   res.render('login');
 });
 
-router.get('/logout/:username', function(req, res) {
-  var username = req.params.username;
-  user.logout(username, function() {
-    user.getStatus(function(userlist) {
-      res.render('index', {message: "You successfully log out!", on: JSON.stringify(userlist.on), off: JSON.stringify(userlist.off) });
-    });
-  });
-});
+// router.get('/logout/:username', function(req, res) {
+//   var username = req.params.username;
+//   user.logout(username, function() {
+//     user.getStatus(function(userlist) {
+//       res.render('index', {message: "You successfully log out!", on: JSON.stringify(userlist.on), off: JSON.stringify(userlist.off) });
+//     });
+//   });
+// });
 
 router.get('/home', function(req, res, next) {
-  // console.log("home page "+req.session.passport.user.id);
-  res.render('test');
+    on = [];
+    off = [];
+    var req_user = req.session.passport.user;
+    User.find({ where: { status: "on" }})
+    .success(function(on_user) {
+      on = on_user.sort();
+    })
+    User.find({ where: { status: "on" }})
+    .success(function(off_user) {
+      off = off_user.sort();
+    })
+    res.render('home',{user: req_user, on: on, off: off});
+
+  // console.log("home page "+req.session.passport.user.id);  
 });
 
 // router.post('/login', function(req, res) {
