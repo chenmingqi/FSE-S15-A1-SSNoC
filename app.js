@@ -30,8 +30,19 @@ passport.use(new LocalStrategy(
       .success(function(user) {
         if (!user) {
           console.log("No such user, create a new one");
-          var new_user = User.create({ username: username, password: password });
-          done(null, new_user);
+          var user = User.create({ username: username, password: password });
+          // User.findAll().success(function(result) {
+          //   console.log("here");
+          //   console.log("returned result : "+result);
+          //   for( var u in result ){
+          //     console.log(u);
+          //   }
+          // })
+          var result = User.findAll();
+          for(var u in result){
+            console.log("a user's username "+u);
+          }
+          done(null, user);
         } else if (password != user.password) {
           console.log("Invalid password");
           done(null, false, { message: 'Invalid password'});
@@ -46,17 +57,30 @@ passport.use(new LocalStrategy(
   }
 ));
 
-//this make the req.user.id available
+// //this make the req.user.id available
+// passport.serializeUser(function(user, done) {
+//   console.log("serializeUser "+user.username);
+//   return done(null, user);
+// });
+
+// passport.deserializeUser(function(user, done) {
+//   console.log("deserializeUser "+id);
+//   db.get('SELECT id, username FROM users WHERE id = ?', id, function(err, row) {
+//     if (!row) return done(null, false);
+//     return done(null, row);
+//   });
+// });
+
 passport.serializeUser(function(user, done) {
   console.log("serializeUser "+user.username);
-  return done(null, user);
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  console.log("deserializeUser "+id);
-  db.get('SELECT id, username FROM users WHERE id = ?', id, function(err, row) {
-    if (!row) return done(null, false);
-    return done(null, row);
+  db.User.find({where: {id: id}}).success(function(user){
+    done(null, user);
+  }).error(function(err){
+    done(err, null);
   });
 });
 

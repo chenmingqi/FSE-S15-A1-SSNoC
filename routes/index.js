@@ -28,14 +28,16 @@ router.get('/home', function(req, res, next) {
     on = [];
     off = [];
     var req_user = req.session.passport.user;
-    User.find({ where: { status: "on" }})
+    User.findAll()
     .success(function(on_user) {
-      on = on_user.sort();
+      on = on_user;
     })
     User.find({ where: { status: "on" }})
     .success(function(off_user) {
-      off = off_user.sort();
+      off = off_user;
     })
+    console.log(on);
+    console.log(req_user.username);
     res.render('home',{user: req_user, on: on, off: off});
 
   // console.log("home page "+req.session.passport.user.id);  

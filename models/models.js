@@ -21,9 +21,18 @@ var User = sequelize.define('Passport_User', {
   password: Sequelize.STRING,
   status: Sequelize.STRING
 })
-User.sync();
 
+sequelize
+  .sync({ force: true })
+  .complete(function(err) {
+     if (!!err) {
+       console.log('An error occurred while creating the table:', err)
+     } else {
+       console.log('It worked!')
+     }
+  })
+  
 //create an admin
-var user = User.create({ username: "admin", password: "mingqi" });
+var user = User.create({ username: "admin", password: "mingqi", status: "on" });
 
 module.exports = User;
