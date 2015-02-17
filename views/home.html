@@ -20,10 +20,6 @@
     <a href="/logout">log out</a>
     <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
-    <p id="online"></p>
-    <p id='offline'></p>
-
-
     <br>
     <br>
 
@@ -35,35 +31,15 @@
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
-
-      //intiate the socket.io object
       var socket = io();
-      // var userlist = {on: <%- on %>, off: <%- off %>};
-      // socket.emit('update userlist', userlist);
+      var userlist = [];
+      socket.emit('update userlist', userlist);
 
       $('form').submit(function(){
         socket.emit('chat message', [$('#username').val(), $('#m').val()]);
         $('#m').val('');
         return false;
       });
-
-      // socket.on('update userlist', function(userlist) {
-      //   var onlist = '';
-      //   var offlist = '';
-
-      //   for(var i = 0; i < userlist.on.length; i++) {
-      //     onlist += userlist.on[i] + ' ';
-      //   }
-
-      //   for(var i = 0; i < userlist.off.length; i++) {
-      //     offlist += userlist.off[i] + ' ';
-      //   }
-
-      //   $('#online').text("Online: " + onlist);
-      //   $('#offline').text("Offline: " + offlist);
-
-      //   return false;
-      // });
 
       socket.on('chat message', function(data){
         var todayDate = new Date();
@@ -78,6 +54,13 @@
 
         $('#messages').append($('<li>').text(timestamp + ", " + data[0] + ":"));
         $('#messages').append($('<li>').text(data[1]));
+      });
+
+      socket.on('update userlist', function(userlist) {
+        
+        alert("another fucker on");
+
+        return false;
       });
 
     </script>

@@ -77,9 +77,10 @@ io.on('connection', function(socket){
     io.emit('chat message', data);
   });
 
-  // socket.on('update userlist', function(userlist) {
-  //   io.emit('update userlist', userlist);
-  // });
+  //check connected clients
+  socket.on('update userlist', function(userlist) {
+    io.emit('update userlist', userlist);
+  });
 });
 
 http.listen(3000, function(){

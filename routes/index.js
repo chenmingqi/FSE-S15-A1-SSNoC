@@ -16,9 +16,7 @@ router.post('/login',
 
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
-	var on = [];
-	var off = [];
-	res.render('home',{user:user, on:on, off:off});
+	res.render('home',{user:user});
 });
 
 router.get('/logout',function(req,res){
