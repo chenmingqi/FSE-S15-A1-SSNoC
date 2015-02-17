@@ -1,0 +1,36 @@
+<html>
+<body>
+  <% if(typeof(message) !== 'undefined') {%>
+     <span><%= message %></span>
+     <br>
+  <% } %>
+
+  <form action="/login" method="post">
+    <div>
+    <label>passport_Username:</label>
+    <input type="text" name="username"/><br/>
+    </div>
+    <div>
+    <label>Password:</label>
+    <input type="password" name="password"/>
+    </div>
+    <label>Confirm Password:</label>
+    <input type="password" name="confirm"/>
+    </div>
+
+    <div>
+    <input type="submit" value="Submit"/>
+    </div>
+  </form>
+
+  <% if(typeof(on) !== 'undefined') {%>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      var userlist = {on: <%- on %>, off: <%- off %>};
+      socket.emit('update userlist', userlist);
+    </script>
+  <% } %>
+<body>
+</html>
