@@ -20,6 +20,15 @@
     <a href="/logout">log out</a>
     <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
+     <!-- online users and offline users-->
+    <div id="online_users"> 
+      <ul>
+        <% for(var i=0; i<online_users.length; i++) {%>
+           <li><%= online_users[i].username %></li>
+        <% } %>
+      </ul>
+    </div>
+
     <br>
     <br>
 
@@ -58,8 +67,10 @@
 
       socket.on('update userlist', function(userlist) {
         
-        alert("another fucker on");
-
+        $('#online_users').html("");
+        for(var i=0; i<userlist.length; i++){
+          $('#online_users').append("<p>"+userlist[i].username+"</p>");
+        }
         return false;
       });
 

@@ -16,12 +16,29 @@ router.post('/login',
 
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
-	res.render('home',{user:user});
+
+	//get all the online and offline users
+	models.User.findAll({where: {status: 1}}).then(function(online_users) {  
+	  models.User.findAll({where:{status:0}}).then(function(offline_users){
+	  		console.log("online_users"+online_users);
+	  		// console.log("offline_users"+offline_users);
+	  		res.render('home',{user:user, online_users:online_users, offline_users:offline_users});
+	  });    
+	});
+
 });
 
 router.get('/logout',function(req,res){
-  	req.logout();
-  	res.redirect('/');
+
+	models.User.find({ where: {id: req.session.passport.user.id}}).then(function(logout_user) {
+	    logout_user.updateAttributes({
+	      status: 0
+	    }).then(function() {
+	    	req.logout();
+  			res.render('logout');
+	    });
+	})
+
 });
 
 module.exports = router;

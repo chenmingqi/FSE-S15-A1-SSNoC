@@ -1,0 +1,14 @@
+<html>
+<body>
+  <h1>You have successfully logout</h1>
+
+  <a href="/">log in</a>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      var userlist = [];
+      socket.emit('update userlist', userlist);
+    </script>
+<body>
+</html>

@@ -31,7 +31,8 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
+  function(username, password, done) {    
+
     models.User.find({ where: { username: username }}).then(function(user) {
       if (!user) {
         
@@ -47,7 +48,13 @@ passport.use(new LocalStrategy(
       } else if (password != user.password) {
         done(null, false, { message: 'Invalid password'});
       } else {
-        done(null, user);
+
+        //update user status
+        models.User.find({where:{username:username, password:password}}).then(function(login_user){
+          login_user.updateAttributes({status: 1}).then(function() {
+              done(null, user);
+          });
+        });
       }
     })
   }
@@ -73,14 +80,24 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 io.on('connection', function(socket){
+
+  //real time chat
   socket.on('chat message', function(data){
     io.emit('chat message', data);
   });
 
   //check connected clients
   socket.on('update userlist', function(userlist) {
-    io.emit('update userlist', userlist);
+
+    models.User.findAll({where: {status: 1}}).then(function(online_users) {  
+      models.User.findAll({where:{status:0}}).then(function(offline_users){
+          userlist = online_users;
+          io.emit('update userlist', userlist);
+      });    
+    });
+  
   });
+
 });
 
 http.listen(3000, function(){
