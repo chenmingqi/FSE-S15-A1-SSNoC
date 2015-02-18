@@ -83,7 +83,18 @@ io.on('connection', function(socket){
 
   //real time chat
   socket.on('chat message', function(data){
-    io.emit('chat message', data);
+
+  //store the chat message into database
+  models.User.find({where: {username: data[0]}}).then(function(user) {
+      models.Message.create({content: data[1]}).then(function(new_message) {
+        new_message.setUser(user).then(function() {
+
+            //then send the new message to the frontend
+            io.emit('chat message', data);
+
+        });
+      });
+    }); 
   });
 
   //check connected clients

@@ -1,15 +1,15 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-  var Task = sequelize.define("Task", {
-    title: DataTypes.STRING
+  var Message = sequelize.define("Message", {
+    content: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
-        Task.belongsTo(models.User);
+        Message.belongsTo(models.User);
       }
     }
   });
 
-  return Task;
+  return Message;
 };

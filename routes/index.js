@@ -17,15 +17,15 @@ router.post('/login',
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
 
-	//get all the online and offline users
-	models.User.findAll({where: {status: 1}}).then(function(online_users) {  
-	  models.User.findAll({where:{status:0}}).then(function(offline_users){
-	  		console.log("online_users"+online_users);
-	  		// console.log("offline_users"+offline_users);
-	  		res.render('home',{user:user, online_users:online_users, offline_users:offline_users});
-	  });    
-	});
-
+	//get the lastest message
+	models.Message.findAll().then(function (message){
+		//get all the online and offline users
+		models.User.findAll({where: {status: 1}}).then(function (online_users){  
+		  models.User.findAll({where:{status:0}}).then(function (offline_users){
+		  	res.render('home',{user:user, online_users:online_users, offline_users:offline_users,message:message});
+		  });    
+		});
+	})
 });
 
 router.get('/logout',function(req,res){
