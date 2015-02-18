@@ -19,7 +19,7 @@ router.get('/home',function(req,res){
 
 	//get the lastest message
 	models.Message.findAll({include:[ models.User ]}).then(function (message){
-		res.render('home',{user:user, online_users:online_users, offline_users:offline_users,message:message});
+		res.render('home',{user:user,message:message});
 	})
 });
 

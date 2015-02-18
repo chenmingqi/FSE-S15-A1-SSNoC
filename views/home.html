@@ -102,11 +102,11 @@
 
         $('#online_users').html("");
         for(var i=0; i<userlist[0].length; i++){
-          $('#online_users').append("<p style=\"float:left; margin-right:5px;\">"+userlist[0][i].username+"</p>");
+          $('#online_users').append("<p style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</p>");
         }
         $('#offline_users').html("");
         for(var i=0; i<userlist[1].length; i++){
-          $('#offline_users').append("<p style=\"float:left;margin-right:5px;\">"+userlist[1][i].username+"</p>");
+          $('#offline_users').append("<p style=\"float:left;margin-right:5px; color:grey\">"+userlist[1][i].username+"</p>");
         }
 
 
