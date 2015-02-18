@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -12,21 +13,40 @@
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
     </style>
+    <!--<link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
+      <link rel="stylesheet" href="css/main.css">
+      <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
 
   </head>
   <body>
+    <div class="row-fluid">
+     <!-- Header -->
+      <div class="row-fluid">
+      <div class="span12">
+      <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+      <a class="navbar-brand" href="#">Welcome, <%= user.username %>!</a>
+      <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+      <li><a href="/logout">log out&nbsp;&nbsp;&nbsp;</a></li>
+      </ul>
+      </div>
+      </div>
+      </div>
+      </div>
+    </div>
+    <!-- End Header -->
 
-    <h1>Welcome, <%= user.username %>!</h1>
-    <a href="/logout">log out</a>
     <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
      <!-- online users and offline users-->
+    <h2 style="margin-top:40px;">Online users</h2>
     <div id="online_users"> 
-      <ul>
+      <p>
         <% for(var i=0; i<online_users.length; i++) {%>
            <li><%= online_users[i].username %></li>
         <% } %>
-      </ul>
+      </p>
     </div>
 
     <br>
