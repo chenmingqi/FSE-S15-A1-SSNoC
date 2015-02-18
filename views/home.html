@@ -12,6 +12,9 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+      #messages_stored { list-style-type: none; margin: 0; padding: 0; }
+      #messages_stored li { padding: 5px 10px; }
+      #messages_stored li:nth-child(odd) { background: #eee; }
     </style>
     <!--<link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
       <link rel="stylesheet" href="css/main.css">
@@ -52,16 +55,15 @@
     <br>
     <br>
 
-    <div>
-      <p>
+    <div id="message_div" style="margin-bottom:100px;"> 
+      <ul id="messages_stored">
         <% for(var i=0; i<message.length; i++) {%>
+           <li><%= message[i].createdAt %> , <%= message[i].User.username %>  </li>
            <li><%= message[i].content %></li>
         <% } %>
-      </p>
+      </ul>
+      <ul id="messages"></ul>
     </div>
-
-    <ul id="messages"></ul>
-
 
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>

@@ -18,8 +18,9 @@ router.get('/home',function(req,res){
 	var user = req.session.passport.user;
 
 	//get the lastest message
-	models.Message.findAll().then(function (message){
+	models.Message.findAll({include:[ models.User ]}).then(function (message){
 		//get all the online and offline users
+		// console.log("Message information "+JSON.stringify(message));
 		models.User.findAll({where: {status: 1}}).then(function (online_users){  
 		  models.User.findAll({where:{status:0}}).then(function (offline_users){
 		  	res.render('home',{user:user, online_users:online_users, offline_users:offline_users,message:message});
