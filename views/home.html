@@ -45,11 +45,9 @@
      <!-- online users and offline users-->
     <h2 style="margin-top:40px;">Online users</h2>
     <div id="online_users"> 
-      <p>
-        <% for(var i=0; i<online_users.length; i++) {%>
-           <li><%= online_users[i].username %></li>
-        <% } %>
-      </p>
+    </div>
+    <h2 style="margin-top:40px;">Offline users</h2>
+    <div id="offline_users"> 
     </div>
 
     <br>
@@ -99,10 +97,19 @@
 
       socket.on('update userlist', function(userlist) {
         
+        // console.log("online users "+userlist[0]);
+        // console.log("offline users "+userlist[1]);
+
         $('#online_users').html("");
-        for(var i=0; i<userlist.length; i++){
-          $('#online_users').append("<p>"+userlist[i].username+"</p>");
+        for(var i=0; i<userlist[0].length; i++){
+          $('#online_users').append("<p style=\"float:left; margin-right:5px;\">"+userlist[0][i].username+"</p>");
         }
+        $('#offline_users').html("");
+        for(var i=0; i<userlist[1].length; i++){
+          $('#offline_users').append("<p style=\"float:left;margin-right:5px;\">"+userlist[1][i].username+"</p>");
+        }
+
+
         return false;
       });
 
