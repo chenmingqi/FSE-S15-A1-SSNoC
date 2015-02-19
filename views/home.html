@@ -89,6 +89,8 @@
         if (hour>12) { hour = hour - 12; }
         if (hour==0) { hour = 12; }
         if (min < 10){min = "0" + min;}
+
+        //Should be like this: Wed Feb 18 2015 23:02:31 GMT-0500 (EST) 
         var timestamp = todayDate.getMonth()+1 + "/" + todayDate.getDate() + "/" +  todayDate.getFullYear()+" "+hour+":"+min+" "+format;
 
         $('#messages').append($('<li>').text(timestamp + ", " + data[0] + ":"));
