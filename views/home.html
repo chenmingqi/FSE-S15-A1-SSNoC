@@ -99,10 +99,15 @@
         
         // console.log("online users "+userlist[0]);
         // console.log("offline users "+userlist[1]);
+        var login_username = $("#username").val();
 
         $('#online_users').html("");
         for(var i=0; i<userlist[0].length; i++){
-          $('#online_users').append("<p style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</p>");
+          if(userlist[0][i].username == login_username){
+            $('#online_users').append("<strong style=\"float:left; margin-right:5px; color:blue;\">"+userlist[0][i].username+"</strong>");
+          }else{
+            $('#online_users').append("<p style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</p>");
+          }
         }
         $('#offline_users').html("");
         for(var i=0; i<userlist[1].length; i++){

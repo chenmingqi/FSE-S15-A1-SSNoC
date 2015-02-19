@@ -14,6 +14,11 @@ router.post('/login',
   })
 );
 
+router.get('/loginFailure', function(req, res) {
+    res.render('error', { message: 'loginFailure, you should provide a different username password match.' });
+});
+
+
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
 

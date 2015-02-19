@@ -96,6 +96,16 @@ io.on('connection', function(socket){
   socket.on('update userlist', function(userlist) {
     models.User.findAll({where:{status:1}}).then(function(online_users) {  
       models.User.findAll({where:{status:0}}).then(function(offline_users){
+          online_users.sort(function(a, b){
+            if(a.username < b.username) return -1;
+            if(a.username > b.username) return 1;
+            return 0;
+          });
+          offline_users.sort(function(a, b){
+            if(a.username < b.username) return -1;
+            if(a.username > b.username) return 1;
+            return 0;
+          });
           var current_userlist = new Array(online_users,offline_users);
           io.emit('update userlist', current_userlist);
       });    

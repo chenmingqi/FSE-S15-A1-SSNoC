@@ -56,6 +56,16 @@
         }
       });
 
+      $("#password").blur(function(){
+        var password = $("#password").val();
+        if( password.length < 4 ) {
+          alert("Password is too short");
+          $("#password").val("");
+          $("#password").focus();
+        }
+      });
+
+
       $("#confirm").blur(function(){
         var password = $("#password").val();
         var confirm = $("#confirm").val();
