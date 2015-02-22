@@ -30,7 +30,7 @@
       <a class="navbar-brand" href="#">Welcome, <%= user.username %>!</a>
       <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-      <li><a id="announce">Announce&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a id="announce" href='/home'>Announce&nbsp;&nbsp;&nbsp;</a></li>
       <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
       </ul>
       </div>
@@ -43,7 +43,7 @@
     <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
     <!-- Announcements -->
-    <h3 style="margin-top:40px;text-align: center;">Announcements</h3>
+    <h3 style="margin-top:40px;text-align: center;">Announcement</h3>
     <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
       <% if(announcement.content != null) {%>
         <h4 id="announcement" ><%= announcement.content %></h4>
@@ -67,9 +67,11 @@
 
     <div id="message_div" style="margin-bottom:100px;">
       <ul id="messages_stored">
-        <% for(var i=0; i<message.length; i++) {%>
-           <li><%= message[i].createdAt %> , <%= message[i].User.username %>  </li>
-           <li><%= message[i].content %></li>
+        <% if(message != null) { %>
+          <% for(var i=0; i<message.length; i++) {%>
+             <li><%= message[i].createdAt %> , <%= message[i].User.username %>  </li>
+             <li><%= message[i].content %></li>
+          <% } %>
         <% } %>
       </ul>
       <ul id="messages"></ul>
