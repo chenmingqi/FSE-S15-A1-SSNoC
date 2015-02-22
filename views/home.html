@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Survivable Social Network on a Chip</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,18 +41,24 @@
 
     <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
-     <!-- online users and offline users-->
-    <h2 style="margin-top:40px;">Online users</h2>
-    <div id="online_users"> 
+    <!-- Announcements -->
+    <h3 style="margin-top:40px;text-align: center;">Announcements</h3>
+    <div id="announcements" style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
+      <p>This is the announcements space</p>
     </div>
-    <h2 style="margin-top:40px;">Offline users</h2>
-    <div id="offline_users"> 
+
+    <!-- online users and offline users-->
+    <h3 style="margin-top:40px;">Online users</h3>
+    <div id="online_users">
+    </div>
+    <h3 style="margin-top:40px;">Offline users</h3>
+    <div id="offline_users">
     </div>
 
     <br>
     <br>
 
-    <div id="message_div" style="margin-bottom:100px;"> 
+    <div id="message_div" style="margin-bottom:100px;">
       <ul id="messages_stored">
         <% for(var i=0; i<message.length; i++) {%>
            <li><%= message[i].createdAt %> , <%= message[i].User.username %>  </li>
@@ -90,7 +96,7 @@
         if (hour==0) { hour = 12; }
         if (min < 10){min = "0" + min;}
 
-        //Should be like this: Wed Feb 18 2015 23:02:31 GMT-0500 (EST) 
+        //Should be like this: Wed Feb 18 2015 23:02:31 GMT-0500 (EST)
         var timestamp = todayDate.getMonth()+1 + "/" + todayDate.getDate() + "/" +  todayDate.getFullYear()+" "+hour+":"+min+" "+format;
 
         $('#messages').append($('<li>').text(timestamp + ", " + data[0] + ":"));
@@ -98,7 +104,7 @@
       });
 
       socket.on('update userlist', function(userlist) {
-        
+
         // console.log("online users "+userlist[0]);
         // console.log("offline users "+userlist[1]);
         var login_username = $("#username").val();
