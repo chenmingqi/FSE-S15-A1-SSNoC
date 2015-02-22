@@ -45,7 +45,13 @@
     <!-- Announcements -->
     <h3 style="margin-top:40px;text-align: center;">Announcements</h3>
     <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
-      <p id="announcement" >This is the announcements space</p>
+      <% if(announcement.content != null) {%>
+        <h4 id="announcement" ><%= announcement.content %></h4>
+        <p id="announcement_metadata">published by <%= announcement.User.username %> at <%= announcement.createdAt %></p>
+      <% }else{ %>
+        <h4 id="announcement" ></h4>
+        <p id="announcement_metadata"></p>
+      <% } %>
     </div>
 
     <!-- online users and offline users-->
@@ -77,9 +83,10 @@
     <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script src="js/jquery-1.11.2.min.js"></script>
     <script>
+    $(document).ready(function() {
       $('#announce').click(function(){
         var announcement = prompt('Please enter your announcement:');
-        if(announcement != null) {
+        if(announcement != '') {
           socket.emit('announce', [$('#username').val(), announcement]);
         }
       });
@@ -110,7 +117,8 @@
       });
 
       socket.on('announce', function(data){
-        $('#announcement').text(data[0] + " at " + getTime() + " says: \n"+ data[1]);
+        $('#announcement').text(data[1]);
+        $('#announcement_metadata').text("published by " + data[0] + " at " + getTime());
       });
 
       socket.on('chat message', function(data){
@@ -152,6 +160,7 @@
 
         return false;
       });
+    });
 
     </script>
   </body>
