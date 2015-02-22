@@ -25,30 +25,9 @@ router.get('/home',function(req,res){
 	//get the lastest message
   models.Message.findAll({include:[ models.User ]}).then(function (message){
       models.Announcement.findOne({include:[ models.User ], order: [['id', 'DESC']] }).then(function (announcement) {
-        //console.log(announcement);
-        //res.end('ok');
-        console.log(announcement.content);
-        console.log(announcement.User.username);
-        //res.end(announcement.content);
         res.render('home',{user:user,message:message,announcement:announcement});
       });
   });
-
-  /*
-  models.Announcement.find().then(function (announcement) {
-    console.log("New: " +  announcement);
-    res.end('ok');
-    //res.render('home',{user:user,message:null,announcement:announcement});
-  });
-  */
-
-  /*
-	models.Message.findAll({include:[ models.User ]}).then(function (message){
-    models.Announcement.find({order: ['id']}).then(function (announcement) {
-      console.log("New: " +  announcement.context);
-      res.render('home',{user:user,message:message,announcement:announcement});
-    });
-	});*/
 });
 
 router.get('/logout',function(req,res){

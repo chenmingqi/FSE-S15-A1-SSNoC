@@ -91,21 +91,6 @@
         }
       });
 
-      var getTime = function() {
-        var todayDate = new Date();
-        var format = "AM";
-        var hour=todayDate.getHours();
-        var min=todayDate.getMinutes();
-        if (hour>11){format="PM";}
-        if (hour>12) { hour = hour - 12; }
-        if (hour==0) { hour = 12; }
-        if (min < 10){min = "0" + min;}
-
-        //Should be like this: Wed Feb 18 2015 23:02:31 GMT-0500 (EST)
-        var timestamp = todayDate.getMonth()+1 + "/" + todayDate.getDate() + "/" +  todayDate.getFullYear()+" "+hour+":"+min+" "+format;
-        return timestamp;
-      };
-
       var socket = io();
       var userlist = [];
       socket.emit('update userlist', userlist);
@@ -118,23 +103,11 @@
 
       socket.on('announce', function(data){
         $('#announcement').text(data[1]);
-        $('#announcement_metadata').text("published by " + data[0] + " at " + getTime());
+        $('#announcement_metadata').text("published by " + data[0] + " at " + data[2]);
       });
 
       socket.on('chat message', function(data){
-        var todayDate = new Date();
-        var format = "AM";
-        var hour=todayDate.getHours();
-        var min=todayDate.getMinutes();
-        if (hour>11){format="PM";}
-        if (hour>12) { hour = hour - 12; }
-        if (hour==0) { hour = 12; }
-        if (min < 10){min = "0" + min;}
-
-        //Should be like this: Wed Feb 18 2015 23:02:31 GMT-0500 (EST)
-        var timestamp = todayDate.getMonth()+1 + "/" + todayDate.getDate() + "/" +  todayDate.getFullYear()+" "+hour+":"+min+" "+format;
-
-        $('#messages').append($('<li>').text(timestamp + ", " + data[0] + ":"));
+        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
         $('#messages').append($('<li>').text(data[1]));
       });
 

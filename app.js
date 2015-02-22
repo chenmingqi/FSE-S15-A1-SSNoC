@@ -86,7 +86,8 @@ io.on('connection', function(socket){
   models.User.find({where: {username: data[0]}}).then(function(user) {
     models.Announcement.create({content: data[1]}).then(function(new_announcement) {
       new_announcement.setUser(user).then(function() {
-          io.emit('announce', data);
+        var timestamp = new_announcement.createdAt.toString();
+        io.emit('announce', [data[0], data[1], timestamp]);
       });
     });
   });
@@ -99,7 +100,8 @@ io.on('connection', function(socket){
       models.Message.create({content: data[1]}).then(function(new_message) {
         new_message.setUser(user).then(function() {
             //then send the new message to the frontend
-            io.emit('chat message', data);
+            var timestamp = new_message.createdAt.toString();
+            io.emit('chat message', [data[0], data[1], timestamp]);
         });
       });
     });
