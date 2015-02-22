@@ -30,7 +30,8 @@
       <a class="navbar-brand" href="#">Welcome, <%= user.username %>!</a>
       <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="/logout">log out&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a id="announce">Announce&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
       </ul>
       </div>
       </div>
@@ -43,8 +44,8 @@
 
     <!-- Announcements -->
     <h3 style="margin-top:40px;text-align: center;">Announcements</h3>
-    <div id="announcements" style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
-      <p>This is the announcements space</p>
+    <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
+      <p id="announcement" >This is the announcements space</p>
     </div>
 
     <!-- online users and offline users-->
@@ -76,6 +77,28 @@
     <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script src="js/jquery-1.11.2.min.js"></script>
     <script>
+      $('#announce').click(function(){
+        var announcement = prompt('Please enter your announcement:');
+        if(announcement != null) {
+          socket.emit('announce', [$('#username').val(), announcement]);
+        }
+      });
+
+      var getTime = function() {
+        var todayDate = new Date();
+        var format = "AM";
+        var hour=todayDate.getHours();
+        var min=todayDate.getMinutes();
+        if (hour>11){format="PM";}
+        if (hour>12) { hour = hour - 12; }
+        if (hour==0) { hour = 12; }
+        if (min < 10){min = "0" + min;}
+
+        //Should be like this: Wed Feb 18 2015 23:02:31 GMT-0500 (EST)
+        var timestamp = todayDate.getMonth()+1 + "/" + todayDate.getDate() + "/" +  todayDate.getFullYear()+" "+hour+":"+min+" "+format;
+        return timestamp;
+      };
+
       var socket = io();
       var userlist = [];
       socket.emit('update userlist', userlist);
@@ -84,6 +107,10 @@
         socket.emit('chat message', [$('#username').val(), $('#m').val()]);
         $('#m').val('');
         return false;
+      });
+
+      socket.on('announce', function(data){
+        $('#announcement').text(data[0] + " at " + getTime() + " says: \n"+ data[1]);
       });
 
       socket.on('chat message', function(data){

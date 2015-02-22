@@ -31,11 +31,11 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {    
+  function(username, password, done) {
 
     models.User.find({ where: { username: username }}).then(function(user) {
       if (!user) {
-        
+
         //create a new user
         models.User.create({
             username: username,
@@ -43,7 +43,7 @@ passport.use(new LocalStrategy(
             status: 1
         }).then(function(new_user) {
               done(null, new_user);
-            });   
+            });
 
       } else if (password != user.password) {
         done(null, false, { message: 'Invalid password'});
@@ -80,6 +80,18 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 io.on('connection', function(socket){
+  //announcement
+  socket.on('announce', function(data){
+  //store the announcement into database
+  models.User.find({where: {username: data[0]}}).then(function(user) {
+    models.Announcement.create({content: data[1]}).then(function(new_announcement) {
+      new_announcement.setUser(user).then(function() {
+          io.emit('announce', data);
+      });
+    });
+  });
+  });
+
   //real time chat
   socket.on('chat message', function(data){
   //store the chat message into database
@@ -90,11 +102,11 @@ io.on('connection', function(socket){
             io.emit('chat message', data);
         });
       });
-    }); 
+    });
   });
   //check connected clients
   socket.on('update userlist', function(userlist) {
-    models.User.findAll({where:{status:1}}).then(function(online_users) {  
+    models.User.findAll({where:{status:1}}).then(function(online_users) {
       models.User.findAll({where:{status:0}}).then(function(offline_users){
           online_users.sort(function(a, b){
             if(a.username < b.username) return -1;
@@ -108,7 +120,7 @@ io.on('connection', function(socket){
           });
           var current_userlist = new Array(online_users,offline_users);
           io.emit('update userlist', current_userlist);
-      });    
+      });
     });
   });
 });
