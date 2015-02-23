@@ -40,6 +40,7 @@ passport.use(new LocalStrategy(
         models.User.create({
             username: username,
             password: password,
+            share: 'U',
             status: 1
         }).then(function(new_user) {
               done(null, new_user);

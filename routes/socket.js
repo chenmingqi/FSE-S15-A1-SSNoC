@@ -1,7 +1,14 @@
+
 var models  = require('../models');
 
 module.exports = function(io) {
   io.on('connection', function(socket){
+
+    //share status
+    socket.on('share status', function(data) {
+      console.log('get status for ' + data[0] + ": " + data[1]);
+    });
+
     //announcement
     socket.on('announce', function(data){
     //store the announcement into database

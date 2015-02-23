@@ -30,7 +30,19 @@
       <a class="navbar-brand" href="#">Welcome, <%= user.username %>!</a>
       <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-      <li><a id="announce" href='/home'>Announce&nbsp;&nbsp;&nbsp;</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Share status
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a id="status_ok" href="#">OK</a></li>
+          <li><a id="status_help" href="#">Help</a></li>
+          <li><a id="status_e" href="#">Emergency</a></li>
+          <li><a href="#">Cancel</a></li>
+        </ul>
+      </li>
+      <li><a id="announce" href='#'>Announce&nbsp;&nbsp;&nbsp;</a></li>
       <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
       </ul>
       </div>
@@ -81,21 +93,35 @@
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 
-    <script src="js/socket.io-1.2.0.js"></script>
-    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script>
     $(document).ready(function() {
+
+      var socket = io();
+      var userlist = [];
+      socket.emit('update userlist', userlist);
+
+      $('#status_ok').click(function() {
+        socket.emit('update status', [$('#username').val(), 'O']);
+      });
+
+      $('#status_help').click(function() {
+        socket.emit('update status', [$('#username').val(), 'H']);
+      });
+
+      $('#status_e').click(function() {
+        socket.emit('update status', [$('#username').val(), 'E']);
+      });
+
       $('#announce').click(function(){
         var announcement = prompt('Please enter your announcement:');
         if(announcement != '') {
           socket.emit('announce', [$('#username').val(), announcement]);
         }
       });
-
-      var socket = io();
-      var userlist = [];
-      socket.emit('update userlist', userlist);
 
       $('form').submit(function(){
         socket.emit('chat message', [$('#username').val(), $('#m').val()]);
