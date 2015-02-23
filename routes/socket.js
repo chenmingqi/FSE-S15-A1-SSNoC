@@ -5,8 +5,28 @@ module.exports = function(io) {
   io.on('connection', function(socket){
 
     //share status
-    socket.on('share status', function(data) {
-      console.log('get status for ' + data[0] + ": " + data[1]);
+    socket.on('update status', function(data) {
+      models.User.find({where:{username:data[0]}}).then(function(user){
+        user.updateAttributes({share: data[1]}).then(function() {
+          models.User.findAll({where:{status:1}}).then(function(online_users) {
+            models.User.findAll({where:{status:0}}).then(function(offline_users){
+                online_users.sort(function(a, b){
+                  if(a.username < b.username) return -1;
+                  if(a.username > b.username) return 1;
+                  return 0;
+                });
+                offline_users.sort(function(a, b){
+                  if(a.username < b.username) return -1;
+                  if(a.username > b.username) return 1;
+                  return 0;
+                });
+                var current_userlist = new Array(online_users,offline_users);
+                io.emit('update userlist', current_userlist);
+            });
+          });
+        });
+      });
+
     });
 
     //announcement

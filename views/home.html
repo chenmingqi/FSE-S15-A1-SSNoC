@@ -57,7 +57,7 @@
     <!-- Announcements -->
     <h3 style="margin-top:40px;text-align: center;">Announcement</h3>
     <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
-      <% if(announcement.content != null) {%>
+      <% if(announcement != null) {%>
         <h4 id="announcement" ><%= announcement.content %></h4>
         <p id="announcement_metadata">published by <%= announcement.User.username %> at <%= announcement.createdAt %></p>
       <% }else{ %>
@@ -99,7 +99,6 @@
     <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script>
     $(document).ready(function() {
-
       var socket = io();
       var userlist = [];
       socket.emit('update userlist', userlist);
@@ -147,15 +146,20 @@
 
         $('#online_users').html("");
         for(var i=0; i<userlist[0].length; i++){
+
           if(userlist[0][i].username == login_username){
-            $('#online_users').append("<strong style=\"float:left; margin-right:5px; color:blue;\">"+userlist[0][i].username+"</strong>");
+            $('#online_users').append("<strong style=\"float:left; margin-right:1px; color:blue;\">"+userlist[0][i].username+ "</strong>");
+            $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }else{
-            $('#online_users').append("<p style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</p>");
+            $('#online_users').append("<p style=\"float:left; margin-right:1px; color:green;\">"+userlist[0][i].username+"</p>");
+            $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }
         }
+
         $('#offline_users').html("");
         for(var i=0; i<userlist[1].length; i++){
-          $('#offline_users').append("<p style=\"float:left;margin-right:5px; color:grey\">"+userlist[1][i].username+"</p>");
+          $('#offline_users').append("<p style=\"float:left;margin-right:1px; color:grey\">"+userlist[1][i].username+"</p>");
+          $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
         }
 
 
