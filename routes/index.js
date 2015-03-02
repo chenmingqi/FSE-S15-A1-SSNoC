@@ -23,9 +23,11 @@ router.get('/home',function(req,res){
 	var user = req.session.passport.user;
 
 	//get the lastest message
-	models.Message.findAll({include:[ models.User ]}).then(function (message){
-		res.render('home',{user:user,message:message});
-	})
+  models.Message.findAll({include:[ models.User ]}).then(function (message){
+      models.Announcement.findOne({include:[ models.User ], order: [['id', 'DESC']] }).then(function (announcement) {
+        res.render('home',{user:user,message:message,announcement:announcement});
+      });
+  });
 });
 
 router.get('/logout',function(req,res){

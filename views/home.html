@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Survivable Social Network on a Chip</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +30,20 @@
       <a class="navbar-brand" href="#">Welcome, <%= user.username %>!</a>
       <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="/logout">log out&nbsp;&nbsp;&nbsp;</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Share status
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a id="status_ok" href="#">OK</a></li>
+          <li><a id="status_help" href="#">Help</a></li>
+          <li><a id="status_e" href="#">Emergency</a></li>
+          <li><a href="#">Cancel</a></li>
+        </ul>
+      </li>
+      <li><a id="announce" href='#'>Announce&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
       </ul>
       </div>
       </div>
@@ -41,22 +54,36 @@
 
     <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
-     <!-- online users and offline users-->
-    <h2 style="margin-top:40px;">Online users</h2>
-    <div id="online_users"> 
+    <!-- Announcements -->
+    <h3 style="margin-top:40px;text-align: center;">Announcement</h3>
+    <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
+      <% if(announcement != null) {%>
+        <h4 id="announcement" ><%= announcement.content %></h4>
+        <p id="announcement_metadata">published by <%= announcement.User.username %> at <%= announcement.createdAt %></p>
+      <% }else{ %>
+        <h4 id="announcement" ></h4>
+        <p id="announcement_metadata"></p>
+      <% } %>
     </div>
-    <h2 style="margin-top:40px;">Offline users</h2>
-    <div id="offline_users"> 
+
+    <!-- online users and offline users-->
+    <h3 style="margin-top:40px;">Online users</h3>
+    <div id="online_users">
+    </div>
+    <h3 style="margin-top:40px;">Offline users</h3>
+    <div id="offline_users">
     </div>
 
     <br>
     <br>
 
-    <div id="message_div" style="margin-bottom:100px;"> 
+    <div id="message_div" style="margin-bottom:100px;">
       <ul id="messages_stored">
-        <% for(var i=0; i<message.length; i++) {%>
-           <li><%= message[i].createdAt %> , <%= message[i].User.username %>  </li>
-           <li><%= message[i].content %></li>
+        <% if(message != null) { %>
+          <% for(var i=0; i<message.length; i++) {%>
+             <li><%= message[i].createdAt %> , <%= message[i].User.username %>  </li>
+             <li><%= message[i].content %></li>
+          <% } %>
         <% } %>
       </ul>
       <ul id="messages"></ul>
@@ -66,13 +93,34 @@
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 
-    <script src="js/socket.io-1.2.0.js"></script>
-    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script>
+    $(document).ready(function() {
       var socket = io();
       var userlist = [];
       socket.emit('update userlist', userlist);
+
+      $('#status_ok').click(function() {
+        socket.emit('update status', [$('#username').val(), 'O']);
+      });
+
+      $('#status_help').click(function() {
+        socket.emit('update status', [$('#username').val(), 'H']);
+      });
+
+      $('#status_e').click(function() {
+        socket.emit('update status', [$('#username').val(), 'E']);
+      });
+
+      $('#announce').click(function(){
+        var announcement = prompt('Please enter your announcement:');
+        if(announcement != '') {
+          socket.emit('announce', [$('#username').val(), announcement]);
+        }
+      });
 
       $('form').submit(function(){
         socket.emit('chat message', [$('#username').val(), $('#m').val()]);
@@ -80,45 +128,47 @@
         return false;
       });
 
+      socket.on('announce', function(data){
+        $('#announcement').text(data[1]);
+        $('#announcement_metadata').text("published by " + data[0] + " at " + data[2]);
+      });
+
       socket.on('chat message', function(data){
-        var todayDate = new Date();
-        var format = "AM";
-        var hour=todayDate.getHours();
-        var min=todayDate.getMinutes();
-        if (hour>11){format="PM";}
-        if (hour>12) { hour = hour - 12; }
-        if (hour==0) { hour = 12; }
-        if (min < 10){min = "0" + min;}
-
-        //Should be like this: Wed Feb 18 2015 23:02:31 GMT-0500 (EST) 
-        var timestamp = todayDate.getMonth()+1 + "/" + todayDate.getDate() + "/" +  todayDate.getFullYear()+" "+hour+":"+min+" "+format;
-
-        $('#messages').append($('<li>').text(timestamp + ", " + data[0] + ":"));
+        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
         $('#messages').append($('<li>').text(data[1]));
       });
 
       socket.on('update userlist', function(userlist) {
-        
+
         // console.log("online users "+userlist[0]);
         // console.log("offline users "+userlist[1]);
         var login_username = $("#username").val();
 
         $('#online_users').html("");
         for(var i=0; i<userlist[0].length; i++){
+
           if(userlist[0][i].username == login_username){
-            $('#online_users').append("<strong style=\"float:left; margin-right:5px; color:blue;\">"+userlist[0][i].username+"</strong>");
+            $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
+                                    + "<strong style=\"float:left; margin-right:5px; color:blue;\">"+userlist[0][i].username+ "</strong>");
+            //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }else{
-            $('#online_users').append("<p style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</p>");
+            $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
+                                    + "<p style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</p>");
+            //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }
         }
+
         $('#offline_users').html("");
         for(var i=0; i<userlist[1].length; i++){
-          $('#offline_users').append("<p style=\"float:left;margin-right:5px; color:grey\">"+userlist[1][i].username+"</p>");
+          $('#offline_users').append("<img src=\"/img/" + userlist[1][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
+                                  + "<p style=\"float:left; margin-right:5px; color:gray;\">"+userlist[1][i].username+"</p>");
+          //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
         }
 
 
         return false;
       });
+    });
 
     </script>
   </body>
