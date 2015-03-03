@@ -40,7 +40,13 @@
     </div>
     <!-- End Header -->
 
-    <input style="visibility:hidden;" value="<%= login_user.username %>" id="username">
+    <input style="visibility:hidden;" value="<%= login_user.username %>" id="login_user">
+    <input style="visibility:hidden;" value="<%= chat_user.username %>" id="chat_user">
+
+
+    <div id="message_div" style="margin-bottom:100px; margin-top:300px">
+      <ul id="messages"></ul>
+    </div>
 
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
@@ -56,14 +62,14 @@
       var userlist = [];
 
       $('form').submit(function(){
-        socket.emit('privatechat', [$('#username').val(), $('#m').val()]);
+        socket.emit('privatechat', [$('#login_user').val(), $('#chat_user').val(), $('#m').val()]);
         $('#m').val('');
         return false;
       });
 
       socket.on('privatechat', function(data){
-        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
-        $('#messages').append($('<li>').text(data[1]));
+        $('#messages').append($('<li>').text(data[3] + ", " + data[0] + " to " + data[1]));
+        $('#messages').append($('<li>').text(data[2]));
       });
 
     });

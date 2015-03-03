@@ -3,7 +3,7 @@
 module.exports = function(sequelize, DataTypes) {
   var PrivateMessage = sequelize.define("PrivateMessage", {
     content: DataTypes.STRING,
-    receiver: DataTypes.INTEGER
+    receiver: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {

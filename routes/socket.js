@@ -58,16 +58,16 @@ module.exports = function(io) {
 
     //real time private chat
     socket.on('privatechat', function(data){
-    //store the chat message into database
-    models.User.find({where: {username: data[0]}}).then(function(user) {
-        models.Message.create({content: data[1]}).then(function(new_message) {
-          new_message.setUser(user).then(function() {
+      models.User.find({where: {username: data[0]}}).then(function(login_user) {
+        models.PrivateMessage.create({content: data[2], receiver:data[1]}).then(function(new_message) {
+          new_message.setUser(login_user).then(function() {
               //then send the new message to the frontend
               var timestamp = new_message.createdAt.toString();
-              io.emit('chat message', [data[0], data[1], timestamp]);
+              io.emit('privatechat', [data[0], data[1], data[2], timestamp]);
           });
         });
       });
+
     });
     
     //check connected clients
