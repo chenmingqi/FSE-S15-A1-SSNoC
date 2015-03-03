@@ -46,8 +46,19 @@ router.get('/logout',function(req,res){
 router.get('/chat',function(req,res){
   var login_user = req.session.passport.user;
   models.User.find({ where: {id: req.query.id}}).then(function(chat_user) {
-      res.render('chat',{login_user:login_user, chat_user:chat_user});
+      models.PrivateMessage.findAll({where:{receiver: chat_user.username, sender: login_user.username}, include:[ models.User ]}).then(function (privatemessage1){
+        models.PrivateMessage.findAll({where:{receiver: login_user.username, sender: chat_user.username}, include:[ models.User ]}).then(function (privatemessage2){
+          //login_user as sender and receiver, both should be shown on the page
+          // console.log("sender message : "+privatemessage1);
+          // console.log("receiver message : "+privatemessage2);
+          // console.log("concat message : "+privatemessage1.concat(privatemessage2));
+          //I need to sort this fucking thing...
+          res.render('chat',{login_user:login_user, chat_user:chat_user, message: privatemessage1.concat(privatemessage2)});
+        });
+      });
   })
+
+
 
   //console.log(req.query.id);
 

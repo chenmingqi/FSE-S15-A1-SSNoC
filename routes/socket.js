@@ -59,7 +59,7 @@ module.exports = function(io) {
     //real time private chat
     socket.on('privatechat', function(data){
       models.User.find({where: {username: data[0]}}).then(function(login_user) {
-        models.PrivateMessage.create({content: data[2], receiver:data[1]}).then(function(new_message) {
+        models.PrivateMessage.create({content: data[2], sender: data[0], receiver:data[1]}).then(function(new_message) {
           new_message.setUser(login_user).then(function() {
               //then send the new message to the frontend
               var timestamp = new_message.createdAt.toString();
