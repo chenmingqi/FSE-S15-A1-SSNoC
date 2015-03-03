@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Survivable Social Network on a Chip</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages_stored { list-style-type: none; margin: 0; padding: 0; }
+      #messages_stored li { padding: 5px 10px; }
+      #messages_stored li:nth-child(odd) { background: #eee; }
+    </style>
+    <!--<link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
+      <link rel="stylesheet" href="css/main.css">
+
+  </head>
+  <body>
+    <div class="row-fluid">
+     <!-- Header -->
+      <div class="row-fluid">
+      <div class="span12">
+      <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+      <a class="navbar-brand" href="#">Chat with <%= chat_user.username %></a>
+      <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+      <li><a href='/home'>Back&nbsp;&nbsp;&nbsp;</a></li>
+      <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
+      </ul>
+      </div>
+      </div>
+      </div>
+      </div>
+    </div>
+    <!-- End Header -->
+
+    <input style="visibility:hidden;" value="<%= login_user.username %>" id="username">
+
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      var socket = io();
+      var userlist = [];
+
+      $('form').submit(function(){
+        socket.emit('privatechat', [$('#username').val(), $('#m').val()]);
+        $('#m').val('');
+        return false;
+      });
+
+      socket.on('privatechat', function(data){
+        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
+        $('#messages').append($('<li>').text(data[1]));
+      });
+
+    });
+
+    </script>
+  </body>
+</html>

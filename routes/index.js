@@ -32,14 +32,24 @@ router.get('/home',function(req,res){
 
 router.get('/logout',function(req,res){
 
-	models.User.find({ where: {id: req.session.passport.user.id}}).then(function(logout_user) {
-	    logout_user.updateAttributes({
-	      status: 0
-	    }).then(function() {
-	    	req.logout();
-  			res.render('logout');
-	    });
-	})
+  models.User.find({ where: {id: req.session.passport.user.id}}).then(function(logout_user) {
+      logout_user.updateAttributes({
+        status: 0
+      }).then(function() {
+        req.logout();
+        res.render('logout');
+      });
+  })
+
+});
+
+router.get('/chat',function(req,res){
+  var login_user = req.session.passport.user;
+  models.User.find({ where: {id: req.query.id}}).then(function(chat_user) {
+      res.render('chat',{login_user:login_user, chat_user:chat_user});
+  })
+
+  //console.log(req.query.id);
 
 });
 

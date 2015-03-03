@@ -153,7 +153,7 @@
             //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }else{
             $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
-                                    + "<p style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</p>");
+                                    + "<a href=\"/chat?id="+userlist[0][i].id+"\" style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</a>");
             //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }
         }

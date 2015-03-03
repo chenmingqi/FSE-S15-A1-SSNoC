@@ -55,6 +55,21 @@ module.exports = function(io) {
         });
       });
     });
+
+    //real time private chat
+    socket.on('privatechat', function(data){
+    //store the chat message into database
+    models.User.find({where: {username: data[0]}}).then(function(user) {
+        models.Message.create({content: data[1]}).then(function(new_message) {
+          new_message.setUser(user).then(function() {
+              //then send the new message to the frontend
+              var timestamp = new_message.createdAt.toString();
+              io.emit('chat message', [data[0], data[1], timestamp]);
+          });
+        });
+      });
+    });
+    
     //check connected clients
     socket.on('update userlist', function(userlist) {
       models.User.findAll({where:{status:1}}).then(function(online_users) {
