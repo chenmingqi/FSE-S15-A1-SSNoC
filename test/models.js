@@ -2,6 +2,7 @@ var should = require('should');
 var assert = require('assert');
 var request = require('supertest');
 var models  = require('../models');
+var app = require('../app');
 
 describe('User', function() {
   it('New users should be created without error', function(done) {
