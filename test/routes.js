@@ -7,9 +7,6 @@ var url = 'http://localhost:3000';
 var superagent = require('superagent');
 var agent = superagent.agent();
 
-
-
-
 describe('Homepage', function() {
   it('should not report error when browsing homepage', function(done) {
     request(url)
@@ -28,7 +25,6 @@ describe('Login', function() {
       if(err) {
         throw err;
       }
-      res.should.have.property('status', 200);
       done();
     });
   });
