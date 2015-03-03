@@ -146,14 +146,13 @@
 
         $('#online_users').html("");
         for(var i=0; i<userlist[0].length; i++){
-
           if(userlist[0][i].username == login_username){
             $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
                                     + "<strong style=\"float:left; margin-right:5px; color:blue;\">"+userlist[0][i].username+ "</strong>");
             //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }else{
             $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
-                                    + "<a href=\"/chat?id="+userlist[0][i].id+"\" style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</a>");
+                                    + "<a id=\""+userlist[0][i].username+"\" href=\"/chat?id="+userlist[0][i].id+"\" style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</a>");
             //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
           }
         }
@@ -161,13 +160,23 @@
         $('#offline_users').html("");
         for(var i=0; i<userlist[1].length; i++){
           $('#offline_users').append("<img src=\"/img/" + userlist[1][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
-                                  + "<p style=\"float:left; margin-right:5px; color:gray;\">"+userlist[1][i].username+"</p>");
+                                  + "<p id=\""+userlist[0][i].username+"\" style=\"float:left; margin-right:5px; color:gray;\">"+userlist[1][i].username+"</p>");
           //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
         }
-
-
         return false;
       });
+
+      socket.on('privatechat_notification', function(data){
+          var sender = data[0];
+          var receiver = data[1];
+          var login_username = $("#username").val();
+
+          if( login_username == receiver ){
+            $("#"+sender).append("<p>herererere</p>");
+          }
+
+      });
+
     });
 
     </script>

@@ -44,7 +44,7 @@
     <input style="visibility:hidden;" value="<%= chat_user.username %>" id="chat_user">
 
 
-    <div id="message_div" style="margin-bottom:100px; margin-top:300px">
+    <div id="message_div" style="margin-bottom:100px; margin-top:100px">
       <ul id="messages_stored">
         <% if(message != null) { %>
           <% for(var i=0; i<message.length; i++) {%>
@@ -70,6 +70,7 @@
       var userlist = [];
 
       $('form').submit(function(){
+        socket.emit('privatechat_notification', [$('#login_user').val(), $('#chat_user').val()]);
         socket.emit('privatechat', [$('#login_user').val(), $('#chat_user').val(), $('#m').val()]);
         $('#m').val('');
         return false;

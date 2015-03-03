@@ -67,7 +67,13 @@ module.exports = function(io) {
           });
         });
       });
+    });
 
+    //private chat notification
+    socket.on('privatechat_notification', function(data){
+      var sender = data[0];
+      var receiver = data[1];
+      io.emit('privatechat_notification', [sender, receiver]);
     });
     
     //check connected clients
