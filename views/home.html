@@ -117,7 +117,7 @@
 
       $('#announce').click(function(){
         var announcement = prompt('Please enter your announcement:');
-        if(announcement != '') {
+        if(announcement != null && announcement != '') {
           socket.emit('announce', [$('#username').val(), announcement]);
         }
       });
