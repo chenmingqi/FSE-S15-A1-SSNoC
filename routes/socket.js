@@ -55,6 +55,27 @@ module.exports = function(io) {
         });
       });
     });
+
+    //real time private chat
+    socket.on('privatechat', function(data){
+      models.User.find({where: {username: data[0]}}).then(function(login_user) {
+        models.PrivateMessage.create({content: data[2], sender: data[0], receiver:data[1]}).then(function(new_message) {
+          new_message.setUser(login_user).then(function() {
+              //then send the new message to the frontend
+              var timestamp = new_message.createdAt.toString();
+              io.emit('privatechat', [data[0], data[1], data[2], timestamp]);
+          });
+        });
+      });
+    });
+
+    //private chat notification
+    socket.on('privatechat_notification', function(data){
+      var sender = data[0];
+      var receiver = data[1];
+      io.emit('privatechat_notification', [sender, receiver]);
+    });
+    
     //check connected clients
     socket.on('update userlist', function(userlist) {
       models.User.findAll({where:{status:1}}).then(function(online_users) {

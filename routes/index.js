@@ -32,14 +32,36 @@ router.get('/home',function(req,res){
 
 router.get('/logout',function(req,res){
 
-	models.User.find({ where: {id: req.session.passport.user.id}}).then(function(logout_user) {
-	    logout_user.updateAttributes({
-	      status: 0
-	    }).then(function() {
-	    	req.logout();
-  			res.render('logout');
-	    });
-	})
+  models.User.find({ where: {id: req.session.passport.user.id}}).then(function(logout_user) {
+      logout_user.updateAttributes({
+        status: 0
+      }).then(function() {
+        req.logout();
+        res.render('logout');
+      });
+  })
+
+});
+
+router.get('/chat',function(req,res){
+  var login_user = req.session.passport.user;
+  models.User.find({ where: {username: req.query.user}}).then(function(chat_user) {
+      models.PrivateMessage.findAll({where:{receiver: chat_user.username, sender: login_user.username}, include:[ models.User ]}).then(function (privatemessage1){
+        models.PrivateMessage.findAll({where:{receiver: login_user.username, sender: chat_user.username}, include:[ models.User ]}).then(function (privatemessage2){
+            var message = privatemessage1.concat(privatemessage2);
+            message.sort(function(a, b){
+              if(a.createdAt < b.createdAt) return -1;
+              if(a.createdAt > b.createdAt) return 1;
+              return 0;
+            });
+          res.render('chat',{login_user:login_user, chat_user:chat_user, message: message});
+        });
+      });
+  })
+
+
+
+  //console.log(req.query.id);
 
 });
 
