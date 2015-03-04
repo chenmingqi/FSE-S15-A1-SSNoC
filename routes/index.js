@@ -45,7 +45,7 @@ router.get('/logout',function(req,res){
 
 router.get('/chat',function(req,res){
   var login_user = req.session.passport.user;
-  models.User.find({ where: {id: req.query.id}}).then(function(chat_user) {
+  models.User.find({ where: {username: req.query.user}}).then(function(chat_user) {
       models.PrivateMessage.findAll({where:{receiver: chat_user.username, sender: login_user.username}, include:[ models.User ]}).then(function (privatemessage1){
         models.PrivateMessage.findAll({where:{receiver: login_user.username, sender: chat_user.username}, include:[ models.User ]}).then(function (privatemessage2){
             var message = privatemessage1.concat(privatemessage2);
