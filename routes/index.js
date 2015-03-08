@@ -58,11 +58,10 @@ router.get('/chat',function(req,res){
         });
       });
   })
-
-
-
-  //console.log(req.query.id);
-
 });
+
+// router.get('/mobile',function(req,res){
+//   res.render('mobile',{});
+// });
 
 module.exports = router;

@@ -26,6 +26,9 @@
     <form class="form-signin" action="/login" method="post">
       <h2 class="form-signin-heading">Please sign in</h2>
 
+      <div id="error">
+      </div>
+
       <input type="username" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
       
       <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
@@ -42,39 +45,80 @@
     
     $(document).ready(function(){
 
-      $("#username").blur(function(){
+      // $("#username").blur(function(){
+      //   var username = $("#username").val();
+      //   if(forbidden_list.indexOf(username) != -1) {
+      //     $("#error").append("<p style=\"color:red;\">\"Please choose another name, this username is in forbidden_list\"</p>");
+      //     $("#username").val("");
+      //     $("#username").focus();
+      //   }
+      //   else if(username.length<3){
+      //     $("#error").append("<p style=\"color:red;\">\"Username is too short\"</p>");
+      //     $("#username").val("");
+      //     $("#username").focus();          
+      //   }else{
+      //     $("#error").html("");
+      //   }
+      // });
+
+      // $("#password").blur(function(){
+      //   var password = $("#password").val();
+      //   if( password.length < 4 ) {
+      //     $("#error").append("<p style=\"color:red;\">\"Password is too short\"</p>");
+      //     $("#password").val("");
+      //     $("#password").focus();
+      //   }else{
+      //     $("#error").html("");
+      //   }
+      // });
+
+
+      // $("#confirm").blur(function(){
+      //   var password = $("#password").val();
+      //   var confirm = $("#confirm").val();
+      //   if( password != confirm ) {
+      //     $("#error").append("<p style=\"color:red;\">\"Two passwords entered are not equal\"</p>");
+      //     $("#confirm").val("");
+      //     $("#password").focus();
+      //   }else{
+      //     $("#error").html("");
+      //   }
+      // });
+
+      $("#signin").click(function(e){
+        e.preventDefault();
         var username = $("#username").val();
-        if(forbidden_list.indexOf(username) != -1) {
-          alert("Please choose another name, this username is in forbidden_list");
-          $("#username").val("");
-          $("#username").focus();
-        }
-        if(username.length<3){
-          alert("Username is too short");
-          $("#username").val("");
-          $("#username").focus();          
-        }
-      });
-
-      $("#password").blur(function(){
-        var password = $("#password").val();
-        if( password.length < 4 ) {
-          alert("Password is too short");
-          $("#password").val("");
-          $("#password").focus();
-        }
-      });
-
-
-      $("#confirm").blur(function(){
         var password = $("#password").val();
         var confirm = $("#confirm").val();
+
+        if(forbidden_list.indexOf(username) != -1) {
+          $("#error").html("<p style=\"color:red;\">\"Please choose another name, this username is in forbidden_list\"</p>");
+          $("#username").val("");
+          $("#username").focus();
+          return false;
+        }
+        if(username.length<3){
+          $("#error").html("<p style=\"color:red;\">\"Username is too short\"</p>");
+          $("#username").val("");
+          $("#username").focus(); 
+          return false;
+        }
+        if( password.length < 4 ) {
+          $("#error").html("<p style=\"color:red;\">\"Password is too short\"</p>");
+          $("#password").val("");
+          $("#password").focus();
+          return false;
+        }
         if( password != confirm ) {
-          alert("Two passwords entered are not equal");
+          $("#error").html("<p style=\"color:red;\">\"Two passwords entered are not equal\"</p>");
           $("#confirm").val("");
           $("#password").focus();
+          return false;
         }
-      });
+
+        $("#signin").unbind('click').click();
+
+      })
 
     });
 

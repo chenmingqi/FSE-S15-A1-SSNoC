@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0 minimal-ui"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/splash/splash-icon.png">
+<link rel="apple-touch-startup-image" href="images/splash/splash-screen.png" 			media="screen and (max-device-width: 320px)" />  
+<link rel="apple-touch-startup-image" href="images/splash/splash-screen@2x.png" 		media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" /> 
+<link rel="apple-touch-startup-image" sizes="640x1096" href="images/splash/splash-screen@3x.png" />
+<link rel="apple-touch-startup-image" sizes="1024x748" href="images/splash/splash-screen-ipad-landscape" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : landscape)" />
+<link rel="apple-touch-startup-image" sizes="768x1004" href="images/splash/splash-screen-ipad-portrait.png" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : portrait)" />
+<link rel="apple-touch-startup-image" sizes="1536x2008" href="images/splash/splash-screen-ipad-portrait-retina.png"   media="(device-width: 768px)	and (orientation: portrait)	and (-webkit-device-pixel-ratio: 2)"/>
+<link rel="apple-touch-startup-image" sizes="1496x2048" href="images/splash/splash-screen-ipad-landscape-retina.png"   media="(device-width: 768px)	and (orientation: landscape)	and (-webkit-device-pixel-ratio: 2)"/>
+
+<title>SSNoC</title>
+
+<link href="styles/style.css"     		 rel="stylesheet" type="text/css">
+<link href="styles/framework.css" 		 rel="stylesheet" type="text/css">
+<link href="styles/owl.theme.css" 		 rel="stylesheet" type="text/css">
+<link href="styles/swipebox.css"		 rel="stylesheet" type="text/css">
+<link href="styles/font-awesome.css"	 rel="stylesheet" type="text/css">
+<link href="styles/animate.css"			 rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="scripts/jquery.js"></script>
+<script type="text/javascript" src="scripts/jqueryui.js"></script>
+<script type="text/javascript" src="scripts/framework.plugins.js"></script>
+<script type="text/javascript" src="scripts/custom.js"></script>
+
+</head>
+<body>
+
+<input style="visibility:hidden;" value="<%= user.username %>" id="username">
+
+<!-- <div id="preloader">
+	<div id="status">
+    	<p class="center-text">
+			Loading the content...
+            <em>Loading depends on your connection speed!</em>
+        </p>
+    </div>
+</div> -->
+
+
+<div class="header">
+	<h3 style="margin-top:20px; margin-left:40px;">Welcome!  <%= user.username %> </h3>
+	<a class="deploy-menu" href="#"><i class="fa fa-angle-down"></i></a> 
+</div>
+
+<div class="header-clear"></div>
+
+<div class="all-elements">
+    <div class="navigation">
+        <ul>
+            <li>
+            	<a class="active-menu" href="index.html">
+                	<i class="fa fa-home"></i>
+                    Home
+                    <i class="fa fa-circle"></i>
+                </a>
+            </li>
+            <li>
+            	<a class="show-sub-menu" href="#">
+                	<i class="fa fa-cog"></i>					
+                    Share status		
+                   <i class="fa fa-plus"></i>
+                </a>
+                <ul class="sub-menu">
+                	<li><a id="status_ok" href=""><i class="fa fa-angle-right"></i>OK<i class="fa fa-circle"></i></a></li>
+                    <li><a id="status_help" href=""><i class="fa fa-angle-right"></i>Help<i class="fa fa-circle"></i></a></li>
+                    <li><a id="status_e" href=""><i class="fa fa-angle-right"></i>Emergency<i class="fa fa-circle"></i></a></li>
+                    <li><a href=""><i class="fa fa-angle-right"></i>Cancel<i class="fa fa-circle"></i></a></li>
+                </ul>
+            </li>
+            <li>
+            	<a id="announce" href="#">
+                	<i class="fa fa-files-o"></i>
+                    Announcement
+                    <i class="fa fa-circle"></i>
+                </a>
+            </li>
+            <li>
+            	<a href="/logout">
+                    <i class="fa fa-envelope-o"></i>
+                    Log out
+                    <i class="fa fa-circle"></i>
+                </a>
+            </li>
+        </ul>    
+    </div>  
+    
+    <div class="content">
+         <div class="container-boxed boxed full-bottom">
+            <h3>Announcement</h3>
+            <em id="announcement_metadata" class="small-subtitle">published by <%= announcement.User.username %> at <%= announcement.createdAt %></em>
+            <p id="announcement" class="no-bottom">
+                <%= announcement.content %>
+            </p>
+         </div>
+        
+        <div id="notification"></div>
+
+        <div class="container-boxed boxed full-bottom">
+            <h3>Online Users</h3>
+              <div id="online_users"></div>
+            <h3>Offline users</h3>
+              <div id="offline_users"></div>
+         </div>
+
+        <div id="message_div">
+          <ul id="messages_stored">
+            <% if(message != null) { %>
+              <% for(var i=0; i<message.length; i++) {%>
+                 <div class="container-boxed boxed full-bottom">
+                    <h3><%= message[i].User.username %> </h3>
+                    <em class="small-subtitle"><%= message[i].createdAt %></em>
+                    <p class="no-bottom">
+                        <%= message[i].content %>
+                    </p>
+                 </div>
+              <% } %>
+            <% } %>
+          </ul>
+          <ul id="messages"></ul>
+        </div>
+
+        <form action="" class="form-control">
+          <input id="m" class="loginbox-username" type="text"/><button class="button button-green">Send</button>
+        </form>
+         
+        
+        <div class="decoration unboxed"></div>   
+        <p class="footer-text">18652 Team A1</p>   
+    </div>
+</div>
+
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      var socket = io();
+      var userlist = [];
+      socket.emit('update userlist', userlist);
+
+      $('#status_ok').click(function() {
+        socket.emit('update status', [$('#username').val(), 'O']);
+      });
+
+      $('#status_help').click(function() {
+        socket.emit('update status', [$('#username').val(), 'H']);
+      });
+
+      $('#status_e').click(function() {
+        socket.emit('update status', [$('#username').val(), 'E']);
+      });
+
+      $('#announce').click(function(){
+        var announcement = prompt('Please enter your announcement:');
+        if(announcement != null && announcement != '') {
+          socket.emit('announce', [$('#username').val(), announcement]);
+        }
+      });
+
+      $('form').submit(function(){
+        socket.emit('chat message', [$('#username').val(), $('#m').val()]);
+        $('#m').val('');
+        return false;
+      });
+
+      socket.on('announce', function(data){
+        $('#announcement').text(data[1]);
+        $('#announcement_metadata').text("published by " + data[0] + " at " + data[2]);
+      });
+
+      socket.on('chat message', function(data){
+        $('#messages').append("<div class=\"container-boxed boxed full-bottom\"><h3>"+data[0]+" </h3><em class=\"small-subtitle\">"+data[2]+"</em><p class=\"no-bottom\">"+data[1]+"</p></div>");
+      });
+
+      socket.on('update userlist', function(userlist) {
+
+        // console.log("online users "+userlist[0]);
+        // console.log("offline users "+userlist[1]);
+        var login_username = $("#username").val();
+
+        $('#online_users').html("");
+        for(var i=0; i<userlist[0].length; i++){
+          if(userlist[0][i].username == login_username){
+            $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
+                                    + "<strong style=\"float:left; margin-right:5px; color:blue;\">"+userlist[0][i].username+ "</strong>");
+            //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
+          }else{
+            $('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
+                                    + "<a id=\""+userlist[0][i].username+"\" href=\"/chat?user="+userlist[0][i].username+"\" style=\"float:left; margin-right:5px; color:green;\">"+userlist[0][i].username+"</a>");
+            //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
+          }
+        }
+
+        $('#offline_users').html("");
+        for(var i=0; i<userlist[1].length; i++){
+          $('#offline_users').append("<img src=\"/img/" + userlist[1][i].share + ".png\" style=\"float:left; margin-right:1px;\" />"
+                                  + "<p id=\""+userlist[0][i].username+"\" style=\"float:left; margin-right:5px; color:gray;\">"+userlist[1][i].username+"</p>");
+          //$('#online_users').append("<img src=\"/img/" + userlist[0][i].share + ".png\" style=\"margin-right:5px;\" />");
+        }
+        return false;
+      });
+
+      socket.on('privatechat_notification', function(data){
+          var sender = data[0];
+          var receiver = data[1];
+          var login_username = $("#username").val();
+
+          if( login_username == receiver ){
+            $("#notification").append("<div class=\"container-boxed boxed full-bottom\"><h3><a href=\"/chat?user="+sender+"\" style=\"color:red;\">You got a message from <Strong>"+sender+"</strong></a></h3></div>");
+          }
+
+      });
+
+    });
+
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
