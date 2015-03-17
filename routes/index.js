@@ -22,7 +22,7 @@ router.get('/loginFailure', function(req, res) {
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
 
-	//get the lastest message
+	//get all messages
   models.Message.findAll({include:[ models.User ]}).then(function (message){
       models.Announcement.findOne({include:[ models.User ], order: [['id', 'DESC']] }).then(function (announcement) {
         res.render('home',{user:user,message:message,announcement:announcement});
