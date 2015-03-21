@@ -64,7 +64,6 @@ router.get('/chat',function(req,res){
 
 router.get('/search/:type', function(req,res) {
   var type = req.params.type;
-  console.log(type);
   res.render('search' + type);
 });
 
@@ -158,6 +157,63 @@ var match = function(messages, words, num, callback) {
     callback(matched_messages);
   });
 }
+
+router.post('/result/primes', function(req, res) {
+  var user = req.session.passport.user;
+  var words = req.body.words.split(' ');
+
+  if(typeof req.body.num != 'undefined') {
+    num = parseInt(req.body.num);
+  }
+
+  filter(words, function(filtered_words) {
+    //console.log(filtered_words);
+    if(filtered_words.length == 0) {
+      res.render('searchprimes', {message: 'No messages found!'})
+    }
+    else {
+      models.PrivateMessage.findAll({where:{sender: user.username}}).then(function (messages){
+        match(messages, filtered_words, num, function(matched_messages) {
+          if(matched_messages.length == 0) {
+            res.render('searchprimes', {message: 'No messages found!'})
+          }
+          else{
+            //res.send(matched_messages);
+            res.render('primesresult', {messages: matched_messages})
+          }
+        })
+      });
+    }
+  });
+})
+
+router.post('/result/pubmes', function(req, res) {
+  var words = req.body.words.split(' ');
+  var num = 10;
+  if(typeof req.body.num != 'undefined') {
+    num = parseInt(req.body.num);
+  }
+
+  filter(words, function(filtered_words) {
+    //console.log(filtered_words);
+    if(filtered_words.length == 0) {
+      res.render('searchpubmes', {message: 'No messages found!'})
+    }
+    else {
+      models.Message.findAll({include:[ models.User ]}).then(function (messages){
+        match(messages, filtered_words, num, function(matched_messages) {
+          if(matched_messages.length == 0) {
+            res.render('searchpubmes', {message: 'No messages found!'})
+          }
+          else{
+            res.render('pubmesresult', {messages: matched_messages})
+          }
+        })
+      });
+    }
+  });
+});
+
 
 router.post('/result/announcement', function(req,res) {
   var words = req.body.words.split(' ');
