@@ -1,4 +1,5 @@
 var models  = require('../models');
+var models_test = require('../models_test');
 var express = require('express');
 var router  = express.Router();
 var passport = require('passport');
