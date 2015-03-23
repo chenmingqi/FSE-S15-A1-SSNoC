@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var app = express();
 var models  = require('./models');
+var models_test  = require('./models_test');
 
 //passport login setting
 var passport = require('passport')
@@ -84,7 +85,6 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
 
 // development error handler
 // will print stacktrace
