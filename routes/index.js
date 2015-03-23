@@ -23,16 +23,6 @@ router.get('/loginFailure', function(req, res) {
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
 
-  console.log("here, at home!!!!!!!!!!!!");
-
-  //test
-  models_test.Message.findAll().then(function (message){
-    console.log("test models_test");
-    console.log(message);
-  });
-
-  console.log("Test models_test done!!!!!!!!");
-
 	//get the lastest message
   models.Message.findAll({include:[ models.User ]}).then(function (message){
       models.Announcement.findOne({include:[ models.User ], order: [['id', 'DESC']] }).then(function (announcement) {
