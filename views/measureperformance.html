@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Survivable Social Network on a Chip</title>
+   <link href="/css/bootstrap.min.css" rel="stylesheet">
+   <link href="/css/signin.css" rel="stylesheet">
+   <script src="/js/jquery-1.11.2.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+   <!-- Header -->
+  <div class="row-fluid">
+    <div class="span12">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+    <a class="navbar-brand" href="#">Measure Performance</a>
+    <div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href='/home'>Back&nbsp;&nbsp;&nbsp;</a></li>
+    <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
+
+  <br>
+
+  <% if(typeof message != "undefined") {%>
+  <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
+      <h4 id="message" style="color:red"><%= message %></h4>
+  </div>
+  <% } %>
+
+  <form class="form-signin" action="" method="post">
+    <h4 class="form-signin-heading">Please enter time duration (1-5)</h2>
+    <input type="username" name="words" class="form-control" placeholder="1-5" required autofocus>
+    <br>
+    <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
+  </form>
+
+</body>
+</html>

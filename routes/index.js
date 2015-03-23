@@ -63,6 +63,18 @@ router.get('/chat',function(req,res){
 
 });
 
+router.get('/measureperformance',function(req,res){
+
+  //empty test database
+  models_test.Message.destroy({ where: {},truncate: true}).then(function(){}); 
+  models_test.User.destroy({ where: {},truncate: true}).then(function(){}); 
+  models_test.Notification.destroy({ where: {},truncate: true}).then(function(){}); 
+  models_test.PrivateMessage.destroy({ where: {},truncate: true}).then(function(){}); 
+  models_test.Announcement.destroy({ where: {},truncate: true}).then(function(){}); 
+
+  res.render('measureperformance',{});
+});
+
 router.get('/search/:type', function(req,res) {
   var type = req.params.type;
   res.render('search' + type);
