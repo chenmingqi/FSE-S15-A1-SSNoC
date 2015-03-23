@@ -16,7 +16,7 @@
       #messages_stored li { padding: 5px 10px; }
       #messages_stored li:nth-child(odd) { background: #eee; }
     </style>
-    <!--<link rel="stylesheet" href="css/bootstrap-responsive.min.css">-->
+      <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
       <link rel="stylesheet" href="css/main.css">
 
   </head>
@@ -32,6 +32,19 @@
       <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Search
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href='/search/citizen'>Search Citizen Information</a></li>
+          <li><a href='/search/announcement'>Search Announcements</a></li>
+          <li><a href='/search/pubmes'>Search Public Messages</a></li>
+          <li><a href='/search/primes'>Search Private Messages</a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Share status
           <b class="caret"></b>
         </a>
@@ -39,7 +52,6 @@
           <li><a id="status_ok" href="#">OK</a></li>
           <li><a id="status_help" href="#">Help</a></li>
           <li><a id="status_e" href="#">Emergency</a></li>
-          <li><a href="#">Cancel</a></li>
         </ul>
       </li>
       <li><a id="announce" href='#'>Announce&nbsp;&nbsp;&nbsp;</a></li>
@@ -91,7 +103,7 @@
       <ul id="messages"></ul>
     </div>
 
-    <form action="">
+    <form action="" class="form-control">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 
@@ -119,7 +131,7 @@
 
       $('#announce').click(function(){
         var announcement = prompt('Please enter your announcement:');
-        if(announcement != '') {
+        if(announcement != null && announcement != '') {
           socket.emit('announce', [$('#username').val(), announcement]);
         }
       });

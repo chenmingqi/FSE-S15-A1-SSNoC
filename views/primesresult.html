@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Survivable Social Network on a Chip</title>
+   <link href="/css/bootstrap.min.css" rel="stylesheet">
+   <script src="/js/jquery-1.11.2.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+   <!-- Header -->
+  <div class="row-fluid">
+    <div class="span12">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+    <a class="navbar-brand" href="#">Search Private Messages</a>
+    <div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href='/search/primes'>Back&nbsp;&nbsp;&nbsp;</a></li>
+    <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
+
+  <br>
+
+  <% if(messages.length != 0) {%>
+  <h3 style="margin-top:40px;">Matched messages</h3>
+  <br>
+  <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
+      <% for(var i = messages.length - 1; i >= 0; i--) {%>
+        <h4><%= messages[i].content %></h4>
+        <p>posted by <%= messages[i].sender %> at <%= messages[i].createdAt %></p>
+        <br>
+      <% } %>
+  </div>
+  <% } %>
+
+
+</body>
+</html>
