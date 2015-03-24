@@ -112,12 +112,12 @@ module.exports = function(io) {
     });
 
     //empty test database
-    socket.on('empty test database and get result', function(){
+    socket.on('empty test database and get result', function(username){
       var message_num = 0;
       models_test.Message.findAll().then(function(data){
         message_num = data.length;
         models_test.Message.destroy({ where: {},truncate: true}).then(function(){
-          io.emit('empty test database and get result',message_num);
+          io.emit('empty test database and get result',[message_num,username]);
         }); 
       });
       
