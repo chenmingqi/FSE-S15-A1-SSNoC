@@ -54,8 +54,7 @@
     $(document).ready(function() {
       var socket = io();
       var timeflag = true;
-
-      $.blockUI({ message: '<h1>Just a moment...</h1>' });
+      var blockonce = true;
 
       $('#test').click(function(e){
         var duration = $('#duration').val()
@@ -92,6 +91,10 @@
           }
         }else{
           //system become unusable
+          if(blockonce == true){
+            blockonce = false;
+            $.blockUI({ message: '<h1>Some other users are testing the performance of the system, system is unavailable now...</h1>' });
+          }
         }
       });
 
@@ -103,6 +106,10 @@
           //clear message div and reset the time flag
           $('#message_div').html("<ul id=\"messages\"></ul>");
           timeflag = true;
+        }else{
+          //unblock the system
+          $.unblockUI();
+          blockonce = true;
         }
       });
 
