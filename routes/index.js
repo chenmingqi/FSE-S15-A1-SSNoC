@@ -64,15 +64,14 @@ router.get('/chat',function(req,res){
 });
 
 router.get('/measureperformance',function(req,res){
-
-  //empty test database
+  var login_user = req.session.passport.user;
+  //empty test database except User table
   models_test.Message.destroy({ where: {},truncate: true}).then(function(){}); 
-  models_test.User.destroy({ where: {},truncate: true}).then(function(){}); 
   models_test.Notification.destroy({ where: {},truncate: true}).then(function(){}); 
   models_test.PrivateMessage.destroy({ where: {},truncate: true}).then(function(){}); 
   models_test.Announcement.destroy({ where: {},truncate: true}).then(function(){}); 
 
-  res.render('measureperformance',{});
+  res.render('measureperformance',{login_user:login_user});
 });
 
 router.get('/search/:type', function(req,res) {

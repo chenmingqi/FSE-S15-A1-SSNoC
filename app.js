@@ -37,6 +37,14 @@ passport.use(new LocalStrategy(
     models.User.find({ where: { username: username }}).then(function(user) {
       if (!user) {
 
+        //create test user
+        models_test.User.create({
+            username: username,
+            password: password,
+            share: 'U',
+            status: 1
+        }).then(function(){});
+
         //create a new user
         models.User.create({
             username: username,
@@ -46,6 +54,8 @@ passport.use(new LocalStrategy(
         }).then(function(new_user) {
               done(null, new_user);
             });
+
+
 
       } else if (password != user.password) {
         done(null, false, { message: 'Invalid password'});

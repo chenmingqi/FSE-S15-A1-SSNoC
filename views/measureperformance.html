@@ -25,7 +25,7 @@
     </div>
     </div>
   </div>
-
+ <input style="visibility:hidden;" value="<%= login_user.username %>" id="username">
   <br>
 
   <% if(typeof message != "undefined") {%>
@@ -42,4 +42,23 @@
   </form>
 
 </body>
+    <script>
+    $(document).ready(function() {
+      var socket = io();
+
+      $('form').submit(function(){
+        socket.emit('chat message', [$('#username').val(), "Measure Performance!"]);
+        $('#m').val('');
+        return false;
+      });
+
+      socket.on('chat message', function(data){
+        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
+        $('#messages').append($('<li>').text(data[1]));
+      });
+
+    });
+
+    </script>
+
 </html>
