@@ -28,15 +28,12 @@
  <input style="visibility:hidden;" value="<%= login_user.username %>" id="username">
   <br>
 
-  <% if(typeof message != "undefined") {%>
-  <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
-      <h4 id="message" style="color:red"><%= message %></h4>
+  <div id="error">
   </div>
-  <% } %>
 
   <form class="form-signin" action="" method="post">
     <h4 class="form-signin-heading">Please enter time duration (1-5)</h2>
-    <input type="username" name="words" class="form-control" placeholder="1-5" required autofocus>
+    <input id="duration" type="username" name="words" class="form-control" placeholder="1-5" required autofocus>
     <br>
     <button id="test" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
   </form>
@@ -56,27 +53,42 @@
       var timeflag = true;
 
       $('#test').click(function(e){
+        var duration = $('#duration').val()
+
+        //check duration format
+        if( duration < 1 || duration > 5 ){
+          $("#error").html("<p style=\"color:red;\">\"Please enter a num between 1 and 5 \"</p>");
+          $("#duration").val("");
+          $("#duration").focus();
+          return false;
+        }
+
+        //clear error message
+        $("#error").html("");
+
         e.preventDefault();
         var stopsending=setTimeout(function(){
           timeflag = false;
           socket.emit('empty test database and get result');
           alert("time up!");
-        },2000);
+        },duration*1000);
         socket.emit('measure performance', [$('#username').val(), "Measure Performance!"]);
       });
-
-
 
       socket.on('measure performance', function(data){
         if( timeflag ){
           socket.emit('measure performance', [$('#username').val(), "Measure Performance!"]);
           $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
           $('#messages').append($('<li>').text(data[1]));
+
         }
       });
 
       socket.on('empty test database and get result',function(message_num){
         alert(message_num);
+        //clear message div and reset the time flag
+        $('#message_div').html("<ul id=\"messages\"></ul>");
+        timeflag = true;
       });
 
     });
