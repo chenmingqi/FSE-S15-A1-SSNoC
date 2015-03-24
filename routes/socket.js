@@ -99,19 +99,30 @@ module.exports = function(io) {
 
     //measure performance 
     socket.on('measure performance', function(data){
-    //store the chat message into database
-    models_test.User.find({where: {username: data[0]}}).then(function(user) {
-        models_test.Message.create({content: data[1]}).then(function(new_message) {
-          new_message.setUser(user).then(function() {
-              //then send the new message to the frontend
-              var timestamp = new_message.createdAt.toString();
-              io.emit('measure performance', [data[0], data[1], timestamp]);
+      //store the chat message into database
+      models_test.User.find({where: {username: data[0]}}).then(function(user) {
+          models_test.Message.create({content: data[1]}).then(function(new_message) {
+            new_message.setUser(user).then(function() {
+                //then send the new message to the frontend
+                var timestamp = new_message.createdAt.toString();
+                io.emit('measure performance', [data[0], data[1], timestamp]);
+            });
           });
-        });
       });
     });
 
+    //empty test database
+    socket.on('empty test database and get result', function(){
+      var message_num = 0;
+      models_test.Message.findAll().then(function(data){
+        message_num = data.length;
+        models_test.Message.destroy({ where: {},truncate: true}).then(function(){
+          io.emit('empty test database and get result',message_num);
+        }); 
+      });
+      
 
+    });
 
   });
 }

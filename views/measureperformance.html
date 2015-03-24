@@ -38,23 +38,45 @@
     <h4 class="form-signin-heading">Please enter time duration (1-5)</h2>
     <input type="username" name="words" class="form-control" placeholder="1-5" required autofocus>
     <br>
-    <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
+    <button id="test" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
   </form>
 
+  <div id="message_div" style="margin-bottom:100px;">
+    <ul id="messages"></ul>
+  </div>
+
 </body>
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script>
     $(document).ready(function() {
       var socket = io();
+      var timeflag = true;
 
-      $('form').submit(function(){
-        socket.emit('chat message', [$('#username').val(), "Measure Performance!"]);
-        $('#m').val('');
-        return false;
+      $('#test').click(function(e){
+        e.preventDefault();
+        var stopsending=setTimeout(function(){
+          timeflag = false;
+          socket.emit('empty test database and get result');
+          alert("time up!");
+        },2000);
+        socket.emit('measure performance', [$('#username').val(), "Measure Performance!"]);
       });
 
-      socket.on('chat message', function(data){
-        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
-        $('#messages').append($('<li>').text(data[1]));
+
+
+      socket.on('measure performance', function(data){
+        if( timeflag ){
+          socket.emit('measure performance', [$('#username').val(), "Measure Performance!"]);
+          $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
+          $('#messages').append($('<li>').text(data[1]));
+        }
+      });
+
+      socket.on('empty test database and get result',function(message_num){
+        alert(message_num);
       });
 
     });
