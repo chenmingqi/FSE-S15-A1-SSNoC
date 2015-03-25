@@ -59,11 +59,17 @@
         e.preventDefault();
         timeflag = true;
 
+        //empty old measure data
+        $('#messages').html("");
+
         //after 10 seconds, the measure would stop
         var stopping=setTimeout(function(){
           timeflag = false;
           socket.emit('measure memory stopped');
-        },10*1000);
+        },60*60*1000);
+
+        //after click, immediately start
+        socket.emit('measure memory', $('#username').val());
       });
 
       //stop the measure immediatly
@@ -78,7 +84,7 @@
         if( timeflag ){
           socket.emit('measure memory', $('#username').val());
         }
-      },1000);
+      },60*1000);
 
       socket.on('measure memory', function(data){
         //now, the system should not be useable for other users
