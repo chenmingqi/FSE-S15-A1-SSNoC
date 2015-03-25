@@ -1,6 +1,9 @@
 
 var models  = require('../models');
 var models_test = require('../models_test');
+var util =require('util');
+var sys = require('sys')
+var exec = require('child_process').exec;
 
 module.exports = function(io) {
   io.on('connection', function(socket){
@@ -120,9 +123,35 @@ module.exports = function(io) {
           io.emit('empty test database and get result',[message_num,username]);
         }); 
       });
-      
+    });
+
+    //measure memory
+    socket.on('measure memory', function(data){
+      // console.log(util.inspect(process.memoryUsage()));
+      var child = exec("df -l", function (error, stdout, stderr) {
+        //split stdout, 11, 12, 13
+        var split_result = stdout.split(/ +/);
+        // console.log("512-blocks:   "+split_result[11]);
+        // console.log("Used:   "+split_result[12]);
+        // console.log("Available:   "+split_result[13]);
+
+        //get non-volatile memory
+        var diskTotal = split_result[11];
+        var diskUsed = split_result[12];
+        if (error !== null) {
+          console.log('exec error: ' + error);
+        }
+        
+        //get volatile memory
+        var heapTotal = util.inspect(process.memoryUsage().heapTotal);
+        var heapUsed = util.inspect(process.memoryUsage().heapUsed);
+        var timestamp = new Date();
+        var username = data;
+        io.emit('measure memory',[username,timestamp,heapTotal,heapUsed,diskTotal,diskUsed]);
+      });
 
     });
+
 
   });
 }

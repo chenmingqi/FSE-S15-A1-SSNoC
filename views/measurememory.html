@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Survivable Social Network on a Chip</title>
+   <link href="/css/bootstrap.min.css" rel="stylesheet">
+   <link href="/css/signin.css" rel="stylesheet">
+   <script src="/js/jquery-1.11.2.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+   <!-- Header -->
+  <div class="row-fluid">
+    <div class="span12">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+    <a class="navbar-brand" href="#">Measure Memory</a>
+    <div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href='/home'>Back&nbsp;&nbsp;&nbsp;</a></li>
+    <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
+ <input style="visibility:hidden;" value="<%= login_user.username %>" id="username">
+  <br>
+
+  <div id="error">
+  </div>
+
+
+  <form class="form-signin" action="" method="post">
+    <h4 class="form-signin-heading">Click the button to start measure memory</h2>
+    <button id="test" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Start</button>
+    <button id="stop" class="btn btn-lg btn-danger btn-block" type="submit" value="Submit">Stop</button>
+  </form>
+
+  <div id="message_div" style="margin-bottom:100px;">
+    <ul id="messages"></ul>
+  </div>
+
+</body>
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.blockUI.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      var socket = io();
+      var timeflag = false;
+      var blockonce = true;
+
+      $('#test').click(function(e){
+        e.preventDefault();
+        timeflag = true;
+
+        //after 10 seconds, the measure would stop
+        var stopping=setTimeout(function(){
+          timeflag = false;
+        },10*1000);
+      });
+
+      //measure memory every 1 second
+      var starting=setInterval(function(){
+        if( timeflag ){
+          socket.emit('measure memory', $('#username').val());
+        }
+      },1000);
+
+      socket.on('measure memory', function(data){
+        //now, the system should not be useable for other users
+        var username = data[0];
+        var timestamp = data[1];
+        var heapTotal = parseInt(parseInt(data[2])/1024);
+        var heapUsed = parseInt(parseInt(data[3])/1024);
+        var diskTotal = parseInt(parseInt(data[4])/1024);
+        var diskUsed = parseInt(parseInt(data[5])/1024);
+        var heapRemaining = heapTotal - heapUsed;
+        var diskRemaining = diskTotal - diskUsed;
+
+        var curr_user = $('#username').val();
+        if( username == curr_user ){
+          if( timeflag ){
+            $('#messages').append($('<li>').text(timestamp + "| heapUsed: " + heapUsed + " kb | heapRemaining: " + heapRemaining + " kb | diskUsed: " + diskUsed + " kb | diskRemaining: " + diskRemaining+" kb"));
+          }
+        }else{
+          //system become unusable
+          if(blockonce == true){
+            blockonce = false;
+            $.blockUI({ message: '<h1>Some other users are performancing testing memory, system is unavailable now...</h1>' });
+          }
+        }
+      });
+
+      // socket.on('empty test database and get result',function(data){
+      //   var username = data[1];
+      //   var curr_user = $('#username').val();
+      //   if(curr_user == username){
+      //     alert(data[0]);
+      //     //clear message div and reset the time flag
+      //     $('#message_div').html("<ul id=\"messages\"></ul>");
+      //     timeflag = true;
+      //   }else{
+      //     //unblock the system
+      //     $.unblockUI();
+      //     blockonce = true;
+      //   }
+      // });
+
+    });
+
+    </script>
+
+</html>
