@@ -24,20 +24,6 @@ router.get('/loginFailure', function(req, res) {
 
 
 router.get('/home',function(req,res){
-
-  console.log("Measure memoryUsage!!!!!-----------------------Measure memoryUsage!!!!!-----------------------Measure memoryUsage!!!!!-----------------------");
-  console.log(util.inspect(process.memoryUsage()));
-
-  // executes `pwd`
-  var child = exec("df ", function (error, stdout, stderr) {
-    console.log("Measure memoryUsage!!!!!-----------------------Measure non memoryUsage!!!!!-----------------------Measure memoryUsage!!!!!-----------------------");
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-    if (error !== null) {
-      console.log('exec error: ' + error);
-    }
-  });
-
 	var user = req.session.passport.user;
 
 	//get the lastest message
@@ -80,6 +66,7 @@ router.get('/chat',function(req,res){
 
 });
 
+//measure performance
 router.get('/measureperformance',function(req,res){
   var login_user = req.session.passport.user;
   //empty test database except User table
@@ -89,6 +76,13 @@ router.get('/measureperformance',function(req,res){
   models_test.Announcement.destroy({ where: {},truncate: true}).then(function(){}); 
 
   res.render('measureperformance',{login_user:login_user});
+});
+
+//measure memory
+router.get('/measurememory',function(req,res){
+  var login_user = req.session.passport.user;
+  res.render('measurememory',{login_user:login_user});
+
 });
 
 router.get('/search/:type', function(req,res) {
