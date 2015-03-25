@@ -3,6 +3,9 @@ var models_test = require('../models_test');
 var express = require('express');
 var router  = express.Router();
 var passport = require('passport');
+var util =require('util');
+var sys = require('sys')
+var exec = require('child_process').exec;
 
 router.get('/', function(req, res) {
     res.render('index', { message: 'Welcome to Survivable Social Network on a Chip' });
@@ -21,6 +24,20 @@ router.get('/loginFailure', function(req, res) {
 
 
 router.get('/home',function(req,res){
+
+  console.log("Measure memoryUsage!!!!!-----------------------Measure memoryUsage!!!!!-----------------------Measure memoryUsage!!!!!-----------------------");
+  console.log(util.inspect(process.memoryUsage()));
+
+  // executes `pwd`
+  var child = exec("df ", function (error, stdout, stderr) {
+    console.log("Measure memoryUsage!!!!!-----------------------Measure non memoryUsage!!!!!-----------------------Measure memoryUsage!!!!!-----------------------");
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+  });
+
 	var user = req.session.passport.user;
 
 	//get the lastest message
