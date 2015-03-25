@@ -38,6 +38,7 @@
     <input id="duration" type="username" name="words" class="form-control" placeholder="1-5" required autofocus>
     <br>
     <button id="test" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
+    <button id="stop" class="btn btn-lg btn-danger btn-block" type="submit" value="Submit">Stop</button>
   </form>
 
   <div id="message_div" style="margin-bottom:100px;">
@@ -55,9 +56,13 @@
       var socket = io();
       var timeflag = true;
       var blockonce = true;
+      var stopflag = false;
 
+      //start testing
       $('#test').click(function(e){
         var duration = $('#duration').val()
+        stopflag = false;
+        timeflag = true;
 
         //check duration format
         if( duration < 1 || duration > 5 ){
@@ -73,10 +78,20 @@
         e.preventDefault();
         var stopsending=setTimeout(function(){
           timeflag = false;
-          socket.emit('empty test database and get result', $('#username').val());
-          alert("time up!");
+          if( !stopflag ){
+            socket.emit('empty test database and get result', $('#username').val());
+            alert("time up!");
+          }
         },duration*1000);
         socket.emit('measure performance', [$('#username').val(), "Measure Performance!"]);
+      });
+
+      //stop testing immediatly
+      $('#stop').click(function(e){
+        e.preventDefault();
+        timeflag = false;
+        socket.emit('empty test database and get result', $('#username').val());
+        stopflag = true;
       });
 
       socket.on('measure performance', function(data){
@@ -102,7 +117,7 @@
         var username = data[1];
         var curr_user = $('#username').val();
         if(curr_user == username){
-          alert(data[0]);
+          alert("Total number of requests and responses is: "+data[0]);
           //clear message div and reset the time flag
           $('#message_div').html("<ul id=\"messages\"></ul>");
           timeflag = true;
