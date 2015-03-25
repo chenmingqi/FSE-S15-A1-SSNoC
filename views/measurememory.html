@@ -62,7 +62,15 @@
         //after 10 seconds, the measure would stop
         var stopping=setTimeout(function(){
           timeflag = false;
+          socket.emit('measure memory stopped');
         },10*1000);
+      });
+
+      //stop the measure immediatly
+      $('#stop').click(function(e){
+        e.preventDefault();
+        timeflag = false;
+        socket.emit('measure memory stopped');
       });
 
       //measure memory every 1 second
@@ -97,20 +105,10 @@
         }
       });
 
-      // socket.on('empty test database and get result',function(data){
-      //   var username = data[1];
-      //   var curr_user = $('#username').val();
-      //   if(curr_user == username){
-      //     alert(data[0]);
-      //     //clear message div and reset the time flag
-      //     $('#message_div').html("<ul id=\"messages\"></ul>");
-      //     timeflag = true;
-      //   }else{
-      //     //unblock the system
-      //     $.unblockUI();
-      //     blockonce = true;
-      //   }
-      // });
+      socket.on('measure memory stopped',function(){
+          $.unblockUI();
+          blockonce = true;
+      });
 
     });
 

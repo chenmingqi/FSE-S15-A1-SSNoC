@@ -152,6 +152,10 @@ module.exports = function(io) {
 
     });
 
+    //measure memory stopped, unblock other users
+    socket.on('measure memory stopped', function(){
+        io.emit('measure memory stopped');
+    });
 
   });
 }
