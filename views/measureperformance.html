@@ -57,12 +57,15 @@
       var timeflag = true;
       var blockonce = true;
       var stopflag = false;
+      var anti_leak = 0;
+      var anti_leak_boundary = 1000;
 
       //start testing
       $('#test').click(function(e){
         var duration = $('#duration').val()
         stopflag = false;
         timeflag = true;
+        anti_leak = 0;
 
         //check duration format
         if( duration < 1 || duration > 5 ){
@@ -99,10 +102,19 @@
         var username = data[0];
         var curr_user = $('#username').val();
         if( username == curr_user ){
+          //anti leak mechanism
+          if(anti_leak >= anti_leak_boundary){
+            alert("Anti_leak_boundary arrived, stop the measure process automatically.");
+            timeflag = false;
+            socket.emit('empty test database and get result', $('#username').val());
+            stopflag = true;
+          }
+          //send another request after recieve response
           if( timeflag ){
             socket.emit('measure performance', [$('#username').val(), "Measure Performance!"]);
             $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
             $('#messages').append($('<li>').text(data[1]));
+            anti_leak++;
           }
         }else{
           //system become unusable
