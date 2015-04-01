@@ -30,8 +30,18 @@
       <a class="navbar-brand" href="#">Welcome, <%= user.username %>!</a>
       <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-      <li><a id="memory" href='/measurememory'>Measure Memory&nbsp;&nbsp;&nbsp;</a></li>
-      <li><a id="performance" href='/measureperformance'>Measure Performance&nbsp;&nbsp;&nbsp;</a></li>
+
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          Measure
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a id="memory" href='/measurememory'>Measure Memory&nbsp;&nbsp;&nbsp;</a></li>
+          <li><a id="performance" href='/measureperformance'>Measure Performance&nbsp;&nbsp;&nbsp;</a></li>
+        </ul>
+      </li>
+
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
           Search
@@ -112,7 +122,7 @@
     <script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/socket.io-1.2.0.js"></script>
     <script src="js/jquery.blockUI.js"></script>
-    <script src="js/blockwhiletesting.js"></script>    
+    <script src="js/blockwhiletesting.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
     <script>
