@@ -14,6 +14,9 @@ var passport = require('passport')
 var session = require( "express-session" );
 var LocalStrategy = require('passport-local').Strategy;
 
+var busboy = require('connect-busboy'); //middleware for form/file upload
+
+
 app.use(session({secret: 'mingqi',
                  saveUninitialized: true,
                  resave: true}));
@@ -84,6 +87,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(busboy());
 
 app.use('/', routes);
 
@@ -117,6 +121,5 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
 
 module.exports = app;

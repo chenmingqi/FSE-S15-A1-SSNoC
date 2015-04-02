@@ -7,6 +7,10 @@ var util =require('util');
 var sys = require('sys')
 var exec = require('child_process').exec;
 
+var path = require('path');     //used for file path
+var fs = require('fs-extra');       //File System - for file manipulation
+
+
 router.get('/', function(req, res) {
     res.render('index', { message: 'Welcome to Survivable Social Network on a Chip' });
 });
@@ -25,7 +29,7 @@ router.get('/loginFailure', function(req, res) {
 
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
-  
+
 	//get the lastest message
   models.Message.findAll({include:[ models.User ]}).then(function (message){
       models.Announcement.findOne({include:[ models.User ], order: [['id', 'DESC']] }).then(function (announcement) {
@@ -66,14 +70,80 @@ router.get('/chat',function(req,res){
 
 });
 
+
+//news feed
+
+router.post('/postnewsfeed', function(req,res) {
+  var fstream;
+  var content;
+  var username = req.session.passport.user.username;
+  req.pipe(req.busboy);
+  req.busboy.on('file', function (fieldname, file, filename) {
+      console.log("Uploading: " + filename);
+      //Path where image will be uploaded
+      fstream = fs.createWriteStream(__dirname + '/../public/uploads/' + filename);
+      file.pipe(fstream);
+      fstream.on('close', function () {
+          console.log("Upload Finished of " + filename);
+          process.nextTick(function() {
+            models.User.find({where: {username: username}}).then(function(user) {
+              models.NewsFeed.create({content: content, filename: filename}).then(function(new_newsfeed) {
+                new_newsfeed.setUser(user).then(function() {
+                  models.NewsFeed.findAll({include:[ models.User]}).then(function(newsfeeds) {
+                    models.PostComment.findAll({include: [models.NewsFeed]}).then(function(comments) {
+                      res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments});
+                    });
+                  });
+                });
+              });
+            });
+          });
+      });
+  });
+
+  req.busboy.on('field', function(key, value, keyTruncated, valueTruncated) {
+    content = value;
+  });
+});
+
+
+router.post('/post/:id', function(req,res) {
+    var content = req.body.comment;
+    var username = req.session.passport.user.username;
+    var id = req.params.id;
+
+    models.NewsFeed.find({where: {id: id}}).then(function(newsfeed) {
+      models.PostComment.create({content: content, username: username}).then(function(new_comment) {
+        new_comment.setNewsFeed(newsfeed).then(function() {
+          models.NewsFeed.findAll({include: [models.User]}).then(function(newsfeeds) {
+            models.PostComment.findAll({include: [models.NewsFeed]}).then(function(comments) {
+              res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments});
+            });
+          });
+        });
+      });
+    });
+    console.log(content);
+    console.log(username);
+});
+
+router.get('/newsfeed', function(req,res) {
+  models.NewsFeed.findAll({include:[ models.User]}).then(function(newsfeeds) {
+      models.PostComment.findAll({include: [models.NewsFeed]}).then(function(comments) {
+        res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments});
+      });
+  });
+});
+
+
 //measure performance
 router.get('/measureperformance',function(req,res){
   var login_user = req.session.passport.user;
   //empty test database except User table
-  models_test.Message.destroy({ where: {},truncate: true}).then(function(){}); 
-  models_test.Notification.destroy({ where: {},truncate: true}).then(function(){}); 
-  models_test.PrivateMessage.destroy({ where: {},truncate: true}).then(function(){}); 
-  models_test.Announcement.destroy({ where: {},truncate: true}).then(function(){}); 
+  models_test.Message.destroy({ where: {},truncate: true}).then(function(){});
+  models_test.Notification.destroy({ where: {},truncate: true}).then(function(){});
+  models_test.PrivateMessage.destroy({ where: {},truncate: true}).then(function(){});
+  models_test.Announcement.destroy({ where: {},truncate: true}).then(function(){});
 
   res.render('measureperformance',{login_user:login_user});
 });
@@ -115,7 +185,6 @@ router.post('/result/name', function(req,res) {
 router.post('/result/status', function(req,res) {
   var status = req.body.status;
   var mapping = {'OK': 'O', 'Help': 'H', 'Emergency': 'E'};
-  console.log(mapping[status]);
   if(typeof mapping[status] == "undefined") {
     res.render('searchcitizen', {message: "You provided a wrong status name!"});
   }

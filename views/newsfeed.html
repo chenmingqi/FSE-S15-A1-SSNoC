@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Survivable Social Network on a Chip</title>
+   <link href="/css/bootstrap.min.css" rel="stylesheet">
+   <link href="/css/signin.css" rel="stylesheet">
+   <script src="/js/jquery-1.11.2.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+   <!-- Header -->
+  <div class="row-fluid">
+    <div class="span12">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+    <a class="navbar-brand" href="#">News Feed</a>
+    <div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href='/newsfeed'>Refresh&nbsp;&nbsp;&nbsp;</a></li>
+    <li><a href='/home'>Back&nbsp;&nbsp;&nbsp;</a></li>
+    <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
+
+  <br>
+
+
+  <form class="form-signin" action="/postnewsfeed" enctype="multipart/form-data" method="post">
+    <h4 class="form-signin-heading">Post Image</h2>
+
+    <input type="file" name="fileUploaded" class="form-control" required autofocus>
+    <input type="username" name="words" class="form-control" placeholder="Description" required autofocus>
+    <br>
+    <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Upload</button>
+  </form>
+
+  <br><br>
+
+  <!-- Newsfeeds -->
+  <% if(newsfeeds != null && newsfeeds.length != 0) {%>
+    <% for(var i = newsfeeds.length - 1; i >= 0; i--) {%>
+      <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
+        <h4><%= newsfeeds[i].content %></h4>
+        <img src="/uploads/<%= newsfeeds[i].filename%>" />
+        <p>posted by <%= newsfeeds[i].User.username %> at <%= newsfeeds[i].createdAt %></p>
+        <div class="reply" id="<%= newsfeeds[i].id%>">
+          <a href="#" style="color:blue;float:right;">Reply</a>
+        </div>
+        <br>
+        <% if(comments != null && comments.length != 0) {%>
+          <% for(var j = 0; j < comments.length; j++) {%>
+            <% if(comments[j].NewsFeed.id == newsfeeds[i].id) {%>
+              <p style="color:gray;"><%= comments[j].username %>: <%= comments[j].content%></p>
+            <% } %>
+          <% } %>
+        <% } %>
+      </div>
+      <br>
+    <% } %>
+  <% } %>
+
+<!--
+<form method='post' action='/postnewsfeed' enctype="multipart/form-data">
+<input type='file' name='fileUploaded'>
+<input type='submit'>
+-->
+
+<script src="/js/jquery-1.11.2.min.js"></script>
+<script src="/js/socket.io-1.2.0.js"></script>
+<script src="/js/jquery.blockUI.js"></script>
+<script src="/js/blockwhiletesting.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.reply').click(function(){
+      if($(this).html().indexOf("<form") == -1) {
+        var id = $(this).attr('id');
+        $(this).append("<form method=\"post\" action=\"/post/" + id +
+                        "\"> <input type=\"text\" name=\"comment\" />" +
+                        "<input type=\"submit\" value=\"post\" /></form>");
+      }
+   });
+
+  });
+</script>
+</body>
+</html>
