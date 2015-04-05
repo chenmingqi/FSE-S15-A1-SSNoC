@@ -105,7 +105,7 @@ module.exports = function(io) {
       //store the chat message into database
       models_test.User.find({where: {username: data[0]}}).then(function(user) {
           models_test.Message.create({content: data[1]}).then(function(new_message) {
-            new_message.setUser(user).then(function() {
+            new_message.setUser(user).then(function() {              
                 //then send the new message to the frontend
                 var timestamp = new_message.createdAt.toString();
                 io.emit('measure performance', [data[0], data[1], timestamp]);
