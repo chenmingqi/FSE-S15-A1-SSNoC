@@ -49,7 +49,7 @@
       <% if( newsfeeds[i].User.share == 'E' ) {%>
         <div style="width: 700px; margin: 5px auto; border: 10px solid #999; padding: 0 20px;  border-radius:10px; border-color:red;">
           <h4><%= newsfeeds[i].content %></h4>
-          <img src="/uploads/<%= newsfeeds[i].filename%>" />
+          <img src="/uploads/<%= newsfeeds[i].filename%>" style="max-width:650px"/>
           <p>posted by <%= newsfeeds[i].User.username %> at <%= newsfeeds[i].createdAt %></p>
           <div class="reply" id="<%= newsfeeds[i].id%>">
             <a href="#" style="color:blue;float:right;">Reply</a>
@@ -72,7 +72,7 @@
       <% if( newsfeeds[i].User.share != 'E' ) {%>
         <div style="width: 700px; margin: 5px auto; border: 1px solid #999; padding: 0 20px;  border-radius:10px;">
           <h4><%= newsfeeds[i].content %></h4>
-          <img src="/uploads/<%= newsfeeds[i].filename%>" />
+          <img src="/uploads/<%= newsfeeds[i].filename%>" style="max-width:650px"/>
           <p>posted by <%= newsfeeds[i].User.username %> at <%= newsfeeds[i].createdAt %></p>
           <div class="reply" id="<%= newsfeeds[i].id%>">
             <a href="#" style="color:blue;float:right;">Reply</a>
