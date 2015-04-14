@@ -77,6 +77,9 @@ router.post('/postnewsfeed', function(req,res) {
   var fstream;
   var content;
   var username = req.session.passport.user.username;
+
+
+
   req.pipe(req.busboy);
   req.busboy.on('file', function (fieldname, file, filename) {
       console.log("Uploading: " + filename);
@@ -91,7 +94,15 @@ router.post('/postnewsfeed', function(req,res) {
                 new_newsfeed.setUser(user).then(function() {
                   models.NewsFeed.findAll({include:[ models.User]}).then(function(newsfeeds) {
                     models.PostComment.findAll({include: [models.NewsFeed]}).then(function(comments) {
-                      res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments});
+                      models.User.findAll({where: {status: 1}}).then(function(users){
+                        var userlist = [];
+                        for(var i = 0; i < users.length; i++) {
+                          if(users[i].username != req.session.passport.user.username) {
+                            userlist.push(users[i].username);
+                          }
+                        }
+                        res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments, userlist: userlist, username: username});
+                      });
                     });
                   });
                 });
@@ -102,7 +113,9 @@ router.post('/postnewsfeed', function(req,res) {
   });
 
   req.busboy.on('field', function(key, value, keyTruncated, valueTruncated) {
-    content = value;
+    if(key == "words") {
+      content = value;
+    }
   });
 });
 
@@ -111,26 +124,42 @@ router.post('/post/:id', function(req,res) {
     var content = req.body.comment;
     var username = req.session.passport.user.username;
     var id = req.params.id;
+    console.log("new comment");
 
     models.NewsFeed.find({where: {id: id}}).then(function(newsfeed) {
       models.PostComment.create({content: content, username: username}).then(function(new_comment) {
         new_comment.setNewsFeed(newsfeed).then(function() {
           models.NewsFeed.findAll({include: [models.User]}).then(function(newsfeeds) {
             models.PostComment.findAll({include: [models.NewsFeed]}).then(function(comments) {
-              res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments});
+              models.User.findAll({where: {status: 1}}).then(function(users){
+                var userlist = [];
+                for(var i = 0; i < users.length; i++) {
+                  if(users[i].username != req.session.passport.user.username) {
+                    userlist.push(users[i].username);
+                  }
+                }
+                res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments, userlist: userlist, username: username});
+              });
             });
           });
         });
       });
     });
-    console.log(content);
-    console.log(username);
 });
 
 router.get('/newsfeed', function(req,res) {
+  var username = req.session.passport.user.username;
   models.NewsFeed.findAll({include:[ models.User]}).then(function(newsfeeds) {
       models.PostComment.findAll({include: [models.NewsFeed]}).then(function(comments) {
-        res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments});
+        models.User.findAll({where: {status: 1}}).then(function(users){
+          var userlist = [];
+          for(var i = 0; i < users.length; i++) {
+            if(users[i].username != req.session.passport.user.username) {
+              userlist.push(users[i].username);
+            }
+          }
+          res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments, userlist: userlist, username:username});
+        });
       });
   });
 });

@@ -29,14 +29,21 @@
 
   <br>
 
+  <input style="visibility:hidden;" value="<%= username %>" id="username">
 
   <form class="form-signin" action="/postnewsfeed" enctype="multipart/form-data" method="post">
     <h4 class="form-signin-heading">Post Image</h2>
 
     <input type="file" name="fileUploaded" class="form-control" required autofocus>
     <input type="username" name="words" class="form-control" placeholder="Description" required autofocus>
+    <% if(userlist != null && userlist.length != 1) {%>
+      <p>I want to notify: </p>
+      <% for(var i = 0; i < userlist.length; i++) {%>
+        <input type="checkbox" name="notify" value="<%= userlist[i] %>"><%= userlist[i] %><br>
+      <% } %>
+    <% } %>
     <br>
-    <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Upload</button>
+    <button id="upload" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Upload</button>
   </form>
 
   <br><br>
@@ -106,11 +113,45 @@
 <script src="/js/blockwhiletesting.js"></script>
 <script>
   $(document).ready(function() {
+    var socket = io();
+    // notify new post
+    socket.on('notify client', function(data) {
+      var curr_user = $('#username').val();
+      if(data[0] instanceof Array) {
+        if($.inArray(curr_user, data[0]) != -1) {
+          alert(data[1] + " has posted a new feed!");
+        }
+      }
+      else {
+        if(curr_user == data[0]) {
+          alert(data[1] + " has posted a new feed!");
+        }
+      }
+    });
+
+    $('#upload').click(function() {
+      var notifylist = [];
+      $("input:checkbox[name=notify]:checked").each(function()
+      {
+            notifylist.push($(this).val());
+      });
+      socket.emit('notify post', [notifylist, $('#username').val()]);
+    });
+
     $('.reply').click(function(){
       if($(this).html().indexOf("<form") == -1) {
         var id = $(this).attr('id');
+        /*
+        var userlist = $('#userlist').val().split(',');
+
+        var checkbox = "";
+        for(var i = 0; i < userlist.length; i++) {
+          checkbox = checkbox.concat("<input type=\"checkbox\" name=notify value=" + userlist[i] + ">" + userlist[i] + " <br>");
+        }*/
+
         $(this).append("<form method=\"post\" action=\"/post/" + id +
                         "\"> <input type=\"text\" name=\"comment\" />" +
+                        /*"<p>I want to notify: </p>" + checkbox + */
                         "<input type=\"submit\" value=\"post\" /></form>");
       }
    });

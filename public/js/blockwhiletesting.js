@@ -2,6 +2,7 @@ $(document).ready(function() {
   var socket = io();
   var blockonce = true;
 
+
   //block the system
   socket.on('measure performance', function(data){
     // var username = data[0];

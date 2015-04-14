@@ -7,6 +7,9 @@ var exec = require('child_process').exec;
 
 module.exports = function(io) {
   io.on('connection', function(socket){
+    socket.on('notify post', function(data) {
+        io.emit('notify client', data);
+    });
 
     //share status
     socket.on('update status', function(data) {
@@ -79,7 +82,7 @@ module.exports = function(io) {
       var receiver = data[1];
       io.emit('privatechat_notification', [sender, receiver]);
     });
-    
+
     //check connected clients
     socket.on('update userlist', function(userlist) {
       models.User.findAll({where:{status:1}}).then(function(online_users) {
@@ -100,12 +103,12 @@ module.exports = function(io) {
       });
     });
 
-    //measure performance 
+    //measure performance
     socket.on('measure performance', function(data){
       //store the chat message into database
       models_test.User.find({where: {username: data[0]}}).then(function(user) {
           models_test.Message.create({content: data[1]}).then(function(new_message) {
-            new_message.setUser(user).then(function() {              
+            new_message.setUser(user).then(function() {
                 //then send the new message to the frontend
                 var timestamp = new_message.createdAt.toString();
                 io.emit('measure performance', [data[0], data[1], timestamp]);
@@ -121,7 +124,7 @@ module.exports = function(io) {
         message_num = data.length;
         models_test.Message.destroy({ where: {},truncate: true}).then(function(){
           io.emit('empty test database and get result',[message_num,username]);
-        }); 
+        });
       });
     });
 
@@ -141,7 +144,7 @@ module.exports = function(io) {
         if (error !== null) {
           console.log('exec error: ' + error);
         }
-        
+
         //get volatile memory
         var heapTotal = util.inspect(process.memoryUsage().heapTotal);
         var heapUsed = util.inspect(process.memoryUsage().heapUsed);
