@@ -115,6 +115,7 @@
   $(document).ready(function() {
     var socket = io();
     // notify new post
+    /*
     socket.on('notify client', function(data) {
       var curr_user = $('#username').val();
       if(data[0] instanceof Array) {
@@ -128,7 +129,9 @@
         }
       }
     });
-
+    */
+    
+    /*
     $('#upload').click(function() {
       var notifylist = [];
       $("input:checkbox[name=notify]:checked").each(function()
@@ -136,7 +139,7 @@
             notifylist.push($(this).val());
       });
       socket.emit('notify post', [notifylist, $('#username').val()]);
-    });
+    });*/
 
     $('.reply').click(function(){
       if($(this).html().indexOf("<form") == -1) {

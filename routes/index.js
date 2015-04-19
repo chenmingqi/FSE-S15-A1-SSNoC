@@ -6,10 +6,9 @@ var passport = require('passport');
 var util =require('util');
 var sys = require('sys')
 var exec = require('child_process').exec;
-
 var path = require('path');     //used for file path
 var fs = require('fs-extra');       //File System - for file manipulation
-
+var main = require('../bin/www')
 
 router.get('/', function(req, res) {
     res.render('index', { message: 'Welcome to Survivable Social Network on a Chip' });
@@ -29,7 +28,6 @@ router.get('/loginFailure', function(req, res) {
 
 router.get('/home',function(req,res){
 	var user = req.session.passport.user;
-
 	//get the lastest message
   models.Message.findAll({include:[ models.User ]}).then(function (message){
       models.Announcement.findOne({include:[ models.User ], order: [['id', 'DESC']] }).then(function (announcement) {
@@ -102,6 +100,7 @@ router.post('/postnewsfeed', function(req,res) {
                             userlist.push(users[i].username);
                           }
                         }
+                        main.io.emit('notify client', [userlist, username]);
                         res.render('newsfeed', {newsfeeds: newsfeeds, comments: comments, userlist: userlist, username: username});
                       });
                     });

@@ -7,10 +7,11 @@ var exec = require('child_process').exec;
 
 module.exports = function(io) {
   io.on('connection', function(socket){
+    /*
     socket.on('notify post', function(data) {
         io.emit('notify client', data);
     });
-
+    */
     //share status
     socket.on('update status', function(data) {
       models.User.find({where:{username:data[0]}}).then(function(user){

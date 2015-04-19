@@ -2,6 +2,20 @@ $(document).ready(function() {
   var socket = io();
   var blockonce = true;
 
+  // notification
+  socket.on('notify client', function(data) {
+    var curr_user = $('#username').val();
+    if(data[0] instanceof Array) {
+      if($.inArray(curr_user, data[0]) != -1) {
+        alert(data[1] + " has posted a new feed!");
+      }
+    }
+    else {
+      if(curr_user == data[0]) {
+        alert(data[1] + " has posted a new feed!");
+      }
+    }
+  });
 
   //block the system
   socket.on('measure performance', function(data){
