@@ -36,7 +36,7 @@
 
     <input type="file" name="fileUploaded" class="form-control" required autofocus>
     <input type="username" name="words" class="form-control" placeholder="Description" required autofocus>
-    <% if(userlist != null && userlist.length != 1) {%>
+    <% if(userlist != null && userlist.length != 0) {%>
       <p>I want to notify: </p>
       <% for(var i = 0; i < userlist.length; i++) {%>
         <input type="checkbox" name="notify" value="<%= userlist[i] %>"><%= userlist[i] %><br>
