@@ -84,6 +84,7 @@ router.post('/postnewsfeed', function(req,res) {
   req.busboy.on('file', function (fieldname, file, filename) {
       console.log("Uploading: " + filename);
       //Path where image will be uploaded
+      filename = (new Date()).toString() + filename;
       fstream = fs.createWriteStream(__dirname + '/../public/uploads/' + filename);
       file.pipe(fstream);
       fstream.on('close', function () {
