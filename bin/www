@@ -14,16 +14,6 @@ models.sequelize.sync().then(function () {
 });
 */
 
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-console.log("www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,www,");
-
-
 /**
  * Module dependencies.
  */
@@ -74,7 +64,6 @@ models_test.sequelize.sync().then(function () {
   models.User.find({ where: {username: "SSNAdmin"}}).then(function(admin) {
 
     if( admin == null ){
-      console.log("not found!!!!!!!!!!!!!!!!!!!!!");
 
       //System initially has a admin user
       models_test.User.create({

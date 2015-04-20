@@ -9,15 +9,6 @@ var app = express();
 var models  = require('./models');
 var models_test  = require('./models_test');
 
-
-console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
-console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
-console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
-console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
-console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
-console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
-console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
-
 //passport login setting
 var passport = require('passport')
 var session = require( "express-session" );

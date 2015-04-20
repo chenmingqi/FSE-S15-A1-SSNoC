@@ -32,7 +32,7 @@
   <div id="error">
   </div>
 
-
+  <% if( login_user.privilege == "Monitor" || login_user.privilege == "Administrator" ) {%>
   <form class="form-signin" action="" method="post">
     <h4 class="form-signin-heading">Click the button to start measure memory</h2>
     <button id="test" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Start</button>
@@ -42,6 +42,11 @@
   <div id="message_div" style="margin-bottom:100px;">
     <ul id="messages"></ul>
   </div>
+  <% }else{ %>
+    <form class="form-signin" action="" method="post">
+        <h4 class="form-signin-heading">You don't have this privilege. Please contact the administrator for more information.</h2>
+    </form>
+  <% }%>
 
 </body>
     <script src="js/jquery-1.11.2.min.js"></script>
