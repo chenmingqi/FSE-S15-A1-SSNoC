@@ -9,6 +9,15 @@ var app = express();
 var models  = require('./models');
 var models_test  = require('./models_test');
 
+
+console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
+console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
+console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
+console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
+console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
+console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
+console.log("app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,app.js,");
+
 //passport login setting
 var passport = require('passport')
 var session = require( "express-session" );
@@ -44,7 +53,7 @@ passport.use(new LocalStrategy(
         models_test.User.create({
             username: username,
             password: password,
-            privilege: 'Citizen',
+            privilege: "Citizen",
             share: 'U',
             status: 1
         }).then(function(){});
@@ -53,7 +62,7 @@ passport.use(new LocalStrategy(
         models.User.create({
             username: username,
             password: password,
-            privilege: 'Citizen',
+            privilege: "Citizen",
             share: 'U',
             status: 1
         }).then(function(new_user) {
