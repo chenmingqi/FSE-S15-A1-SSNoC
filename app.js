@@ -44,6 +44,7 @@ passport.use(new LocalStrategy(
         models_test.User.create({
             username: username,
             password: password,
+            privilege: 'Citizen',
             share: 'U',
             status: 1
         }).then(function(){});
@@ -52,6 +53,7 @@ passport.use(new LocalStrategy(
         models.User.create({
             username: username,
             password: password,
+            privilege: 'Citizen',
             share: 'U',
             status: 1
         }).then(function(new_user) {
