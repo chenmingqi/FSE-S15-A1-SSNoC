@@ -46,7 +46,8 @@ passport.use(new LocalStrategy(
             password: password,
             privilege: "Citizen",
             share: 'U',
-            status: 1
+            status: 1,
+            active: 1
         }).then(function(){});
 
         //create a new user
@@ -55,7 +56,8 @@ passport.use(new LocalStrategy(
             password: password,
             privilege: "Citizen",
             share: 'U',
-            status: 1
+            status: 1,
+            active: 1
         }).then(function(new_user) {
               done(null, new_user);
             });
@@ -64,8 +66,9 @@ passport.use(new LocalStrategy(
 
       } else if (password != user.password) {
         done(null, false, { message: 'Invalid password'});
+      } else if(user.active == 0){
+        done(null, false, { message: 'Account inactive'});
       } else {
-
         //update user status
         models.User.find({where:{username:username, password:password}}).then(function(login_user){
           login_user.updateAttributes({status: 1}).then(function() {

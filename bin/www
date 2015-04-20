@@ -71,7 +71,8 @@ models_test.sequelize.sync().then(function () {
           password: "admin",
           privilege: "Administrator",
           share: 'U',
-          status: 0
+          status: 0,
+          active: 1
       }).then(function(){
         console.log("Create test admin user.");
       });
@@ -81,7 +82,8 @@ models_test.sequelize.sync().then(function () {
           password: "admin",
           privilege: "Administrator",
           share: 'U',
-          status: 0
+          status: 0,
+          active: 1
       }).then(function() {
         console.log("Create admin user.");
       });

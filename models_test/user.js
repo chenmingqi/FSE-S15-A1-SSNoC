@@ -6,7 +6,8 @@ module.exports = function(sequelize, DataTypes) {
     password: DataTypes.STRING,
     privilege: DataTypes.STRING,
     share: DataTypes.STRING,
-    status: DataTypes.BOOLEAN
+    status: DataTypes.BOOLEAN,
+    active: DataTypes.BOOLEAN
   }, {
     classMethods: {
       associate: function(models) {
