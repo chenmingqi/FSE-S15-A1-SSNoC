@@ -38,7 +38,7 @@
 
   <% if( login_user.privilege == "Administrator" ) {%>
 
-    
+    <form class="form-signin" action="" method="post">
     <h3>Administrator</h3>
     <% for(var i=0; i<users.length; i++){ %>
       <% if(users[i].privilege == "Administrator"){ %>
@@ -66,6 +66,7 @@
           <a href="/privilege?username=<%= users[i].username %>"> <%= users[i].username %> </a>
       <% } %>
     <% } %>
+    </form>
 
   <% }else{ %>
     <form class="form-signin" action="" method="post">
