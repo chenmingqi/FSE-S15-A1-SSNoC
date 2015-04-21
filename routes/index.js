@@ -75,8 +75,6 @@ router.post('/postnewsfeed', function(req,res) {
   var content;
   var username = req.session.passport.user.username;
 
-
-
   req.pipe(req.busboy);
   req.busboy.on('file', function (fieldname, file, filename) {
       console.log("Uploading: " + filename);
@@ -367,21 +365,46 @@ router.post('/result/announcement', function(req,res) {
 router.get('/admin',function(req,res){
   var login_user = req.session.passport.user;
   models.User.findAll().then(function (users){
-    res.render('admin',{login_user:login_user,users: users});
+    res.render('admin',{login_user:login_user,users: users, message: " "});
   });
 });
 
-//admin management page
+//admin privilege modify page
 router.get('/privilege',function(req,res){
   var login_user = req.session.passport.user;
   var username = req.query.username;
 
   models.User.findAll().then(function (users){
-    models.User.find({ where: {username : username }}).then(function(user) {
+    models.User.find({ where: {username : username }}).then(function (user) {
       res.render('privilege',{login_user:login_user,users: users, user: user});
     });
   });
 });
+
+router.post('/privilege_modify', function(req,res) {
+    var login_user = req.session.passport.user;
+    var modified_userid = req.body.modified_userid;
+    var active = req.body.active;
+    var privilege = req.body.privilege;
+    var username = req.body.username;
+    var password = req.body.password;
+
+    //should I remain the same if the administrator leave some field empty?
+    models.User.find({ where: {id: modified_userid}}).then(function (user){
+      user.updateAttributes({
+        active: active,
+        privilege: privilege,
+        username: username,
+        password: password
+      }).then(function() {
+        models.User.findAll().then(function (users){
+          res.render('admin',{login_user:login_user,users: users, message: "Modified successfully!"});
+        });
+      });
+    });
+
+});
+
 
 // router.get('/mobile',function(req,res){
 //   res.render('mobile',{});

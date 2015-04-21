@@ -33,10 +33,11 @@
   </div>
 
   <% if( login_user.privilege == "Administrator" ) {%>
-    <form class="form-signin" action="" method="post">
-    <h4>Modify <%= user.username%> information </h4>
+    <form class="form-signin" action="/privilege_modify" method="post">
+      <input style="visibility:hidden;" value="<%= user.id %>" name="modified_userid">
+      <h4>Modify <%= user.username%> information </h4>
       <label class="col-sm-2 control-label" >AccountStatus</label>
-      <select class="form-control" name="AccountStatus">
+      <select class="form-control" name="active">
         <option value="1">Active</option>
         <option value="0">Inactive</option>
       </select>
@@ -51,6 +52,8 @@
       <input id="username" type="username" name="username" class="form-control" placeholder="<%= user.username%>" >
       <label class="col-sm-2 control-label">NewPassword</label>
       <input id="password" type="password" name="password" class="form-control" placeholder="<%= user.password%>" >
+      <label class="col-sm-2 control-label">ConfirmNewPassword</label>
+      <input id="confirmpassword" type="password" name="confirmpassword" class="form-control" placeholder="<%= user.password%>" >
       <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
     </form>
   <% }else{ %>
