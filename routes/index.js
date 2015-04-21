@@ -65,7 +65,6 @@ router.get('/chat',function(req,res){
       });
   })
   //console.log(req.query.id);
-
 });
 
 
@@ -361,6 +360,26 @@ router.post('/result/announcement', function(req,res) {
         })
       });
     }
+  });
+});
+
+//admin management page
+router.get('/admin',function(req,res){
+  var login_user = req.session.passport.user;
+  models.User.findAll().then(function (users){
+    res.render('admin',{login_user:login_user,users: users});
+  });
+});
+
+//admin management page
+router.get('/privilege',function(req,res){
+  var login_user = req.session.passport.user;
+  var username = req.query.username;
+
+  models.User.findAll().then(function (users){
+    models.User.find({ where: {username : username }}).then(function(user) {
+      res.render('privilege',{login_user:login_user,users: users, user: user});
+    });
   });
 });
 

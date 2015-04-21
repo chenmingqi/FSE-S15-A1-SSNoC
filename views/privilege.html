@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Survivable Social Network on a Chip</title>
+   <link href="/css/bootstrap.min.css" rel="stylesheet">
+   <link href="/css/signin.css" rel="stylesheet">
+   <script src="/js/jquery-1.11.2.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+   <!-- Header -->
+  <div class="row-fluid">
+    <div class="span12">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+    <a class="navbar-brand" href="#">Privilege Management for <%= user.username%> </a>
+    <div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href='/home'>Back&nbsp;&nbsp;&nbsp;</a></li>
+    <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
+ <input style="visibility:hidden;" value="<%= login_user.username %>" id="username">
+  <br>
+
+  <div id="error">
+  </div>
+
+  <% if( login_user.privilege == "Administrator" ) {%>
+    <form class="form-signin" action="" method="post">
+    <h4>Modify <%= user.username%> information </h4>
+      <label class="col-sm-2 control-label" >AccountStatus</label>
+      <select class="form-control" name="AccountStatus">
+        <option value="1">Active</option>
+        <option value="0">Inactive</option>
+      </select>
+      <label class="col-sm-2 control-label">UserPrivilege</label>
+      <select class="form-control" name="privilege">
+        <option value="Administrator">Administrator</option>
+        <option value="Coordinator">Coordinator</option>
+        <option value="Monitor">Monitor</option>
+        <option value="Citizen">Citizen</option>
+      </select>
+      <label class="col-sm-2 control-label">NewUsername</label>
+      <input id="username" type="username" name="username" class="form-control" placeholder="<%= user.username%>" >
+      <label class="col-sm-2 control-label">NewPassword</label>
+      <input id="password" type="password" name="password" class="form-control" placeholder="<%= user.password%>" >
+      <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
+    </form>
+  <% }else{ %>
+    <form class="form-signin" action="" method="post">
+        <h4 class="form-signin-heading">You don't have this privilege. Please contact the administrator for more information.</h2>
+    </form>
+  <% }%>
+
+</body>
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.blockUI.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+    });
+
+    </script>
+
+</html>

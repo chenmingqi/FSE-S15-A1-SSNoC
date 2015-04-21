@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Survivable Social Network on a Chip</title>
+   <link href="/css/bootstrap.min.css" rel="stylesheet">
+   <link href="/css/signin.css" rel="stylesheet">
+   <script src="/js/jquery-1.11.2.min.js"></script>
+   <script src="/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+   <!-- Header -->
+  <div class="row-fluid">
+    <div class="span12">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+    <a class="navbar-brand" href="#">Admin</a>
+    <div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right">
+    <li><a href='/home'>Back&nbsp;&nbsp;&nbsp;</a></li>
+    <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
+    </ul>
+    </div>
+    </div>
+    </div>
+    </div>
+  </div>
+ <input style="visibility:hidden;" value="<%= login_user.username %>" id="username">
+  <br>
+
+  <div id="error">
+  </div>
+
+  <% if( login_user.privilege == "Administrator" ) {%>
+
+    
+    <h3>Administrator</h3>
+    <% for(var i=0; i<users.length; i++){ %>
+      <% if(users[i].privilege == "Administrator"){ %>
+          <a href="/privilege?username=<%= users[i].username %>"> <%= users[i].username %> </a>
+      <% } %>
+    <% } %>
+
+    <h3>Coordinator</h3>
+    <% for(var i=0; i<users.length; i++){ %>
+      <% if(users[i].privilege == "Coordinator"){ %>
+          <a href="/privilege?username=<%= users[i].username %>"> <%= users[i].username %> </a>
+      <% } %>
+    <% } %>
+
+    <h3>Monitor</h3>
+    <% for(var i=0; i<users.length; i++){ %>
+      <% if(users[i].privilege == "Monitor"){ %>
+          <a href="/privilege?username=<%= users[i].username %>"> <%= users[i].username %> </a>
+      <% } %>
+    <% } %>
+
+    <h3>Citizen</h3>
+    <% for(var i=0; i<users.length; i++){ %>
+      <% if(users[i].privilege == "Citizen"){ %>
+          <a href="/privilege?username=<%= users[i].username %>"> <%= users[i].username %> </a>
+      <% } %>
+    <% } %>
+
+  <% }else{ %>
+    <form class="form-signin" action="" method="post">
+        <h4 class="form-signin-heading">You don't have this privilege. Please contact the administrator for more information.</h2>
+    </form>
+  <% }%>
+
+</body>
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/socket.io-1.2.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.blockUI.js"></script>
+    <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+    });
+
+    </script>
+
+</html>

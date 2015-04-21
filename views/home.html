@@ -74,6 +74,10 @@
       <li><a id="announce" href='#'>Announce&nbsp;&nbsp;&nbsp;</a></li>
       <% } %>
 
+      <% if( user.privilege == "Administrator" ) {%>
+      <li><a id="admin" href='/admin'>Admin&nbsp;&nbsp;&nbsp;</a></li>
+      <% } %>
+
       <li><a href="/logout">Log out&nbsp;&nbsp;&nbsp;</a></li>
       </ul>
       </div>
