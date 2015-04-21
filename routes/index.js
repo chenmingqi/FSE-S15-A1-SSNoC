@@ -31,7 +31,7 @@ router.get('/home',function(req,res){
 	//get the lastest message
   models.Message.findAll({include:[ models.User ]}).then(function (message){
       models.Announcement.findOne({include:[ models.User ], order: [['id', 'DESC']] }).then(function (announcement) {
-        res.render('home',{user:user,message:message,announcement:announcement});
+        res.render('mobile',{user:user,message:message,announcement:announcement});
       });
   });
 });

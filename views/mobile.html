@@ -5,27 +5,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/splash/splash-icon.png">
-<link rel="apple-touch-startup-image" href="images/splash/splash-screen.png" 			media="screen and (max-device-width: 320px)" />  
-<link rel="apple-touch-startup-image" href="images/splash/splash-screen@2x.png" 		media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" /> 
-<link rel="apple-touch-startup-image" sizes="640x1096" href="images/splash/splash-screen@3x.png" />
-<link rel="apple-touch-startup-image" sizes="1024x748" href="images/splash/splash-screen-ipad-landscape" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : landscape)" />
-<link rel="apple-touch-startup-image" sizes="768x1004" href="images/splash/splash-screen-ipad-portrait.png" media="screen and (min-device-width : 481px) and (max-device-width : 1024px) and (orientation : portrait)" />
-<link rel="apple-touch-startup-image" sizes="1536x2008" href="images/splash/splash-screen-ipad-portrait-retina.png"   media="(device-width: 768px)	and (orientation: portrait)	and (-webkit-device-pixel-ratio: 2)"/>
-<link rel="apple-touch-startup-image" sizes="1496x2048" href="images/splash/splash-screen-ipad-landscape-retina.png"   media="(device-width: 768px)	and (orientation: landscape)	and (-webkit-device-pixel-ratio: 2)"/>
-
 <title>SSNoC</title>
 
 <link href="styles/style.css"     		 rel="stylesheet" type="text/css">
 <link href="styles/framework.css" 		 rel="stylesheet" type="text/css">
-<link href="styles/owl.theme.css" 		 rel="stylesheet" type="text/css">
-<link href="styles/swipebox.css"		 rel="stylesheet" type="text/css">
 <link href="styles/font-awesome.css"	 rel="stylesheet" type="text/css">
-<link href="styles/animate.css"			 rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="scripts/jquery.js"></script>
 <script type="text/javascript" src="scripts/jqueryui.js"></script>
-<script type="text/javascript" src="scripts/framework.plugins.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
 
 </head>
@@ -61,18 +48,48 @@
                 </a>
             </li>
             <li>
-            	<a class="show-sub-menu" href="#">
-                	<i class="fa fa-cog"></i>					
-                    Share status		
+              <a class="show-sub-menu" href="#">
+                  <i class="fa fa-cog"></i>         
+                    Share status    
                    <i class="fa fa-plus"></i>
                 </a>
                 <ul class="sub-menu">
-                	<li><a id="status_ok" href=""><i class="fa fa-angle-right"></i>OK<i class="fa fa-circle"></i></a></li>
+                  <li><a id="status_ok" href=""><i class="fa fa-angle-right"></i>OK<i class="fa fa-circle"></i></a></li>
                     <li><a id="status_help" href=""><i class="fa fa-angle-right"></i>Help<i class="fa fa-circle"></i></a></li>
                     <li><a id="status_e" href=""><i class="fa fa-angle-right"></i>Emergency<i class="fa fa-circle"></i></a></li>
                     <li><a href=""><i class="fa fa-angle-right"></i>Cancel<i class="fa fa-circle"></i></a></li>
                 </ul>
             </li>
+
+            <% if( user.privilege == "Monitor" || user.privilege == "Administrator" ) {%>
+            <li>
+              <a class="show-sub-menu" href="#">
+                  <i class="fa fa-cog"></i>         
+                    Measure    
+                   <i class="fa fa-plus"></i>
+                </a>
+                <ul class="sub-menu">
+                  <li><a id="" href="/measurememory"><i class="fa fa-angle-right"></i>Measure Memory<i class="fa fa-circle"></i></a></li>
+                    <li><a id="" href="/measureperformance"><i class="fa fa-angle-right"></i>Measure Performance<i class="fa fa-circle"></i></a></li>
+                </ul>
+            </li>
+            <% } %>
+
+            <li>
+              <a class="show-sub-menu" href="#">
+                  <i class="fa fa-cog"></i>         
+                    Search    
+                   <i class="fa fa-plus"></i>
+                </a>
+                <ul class="sub-menu">
+                  <li><a id="" href="/search/citizen"><i class="fa fa-angle-right"></i>Search Citizen Information<i class="fa fa-circle"></i></a></li>
+                  <li><a id="" href="/search/announcement"><i class="fa fa-angle-right"></i>Search Announcements<i class="fa fa-circle"></i></a></li>
+                  <li><a id="" href="/search/pubmes"><i class="fa fa-angle-right"></i>Search Public Messages<i class="fa fa-circle"></i></a></li>
+                  <li><a id="" href="/search/primes"><i class="fa fa-angle-right"></i>Search Private Messages<i class="fa fa-circle"></i></a></li>
+                </ul>
+            </li>
+
+            <% if( user.privilege == "Coordinator" || user.privilege == "Administrator" ) {%>
             <li>
             	<a id="announce" href="#">
                 	<i class="fa fa-files-o"></i>
@@ -80,6 +97,26 @@
                     <i class="fa fa-circle"></i>
                 </a>
             </li>
+             <% } %>
+
+            <% if( user.privilege == "Administrator" ) {%>
+            <li>
+              <a id="admin" href="/admin">
+                  <i class="fa fa-files-o"></i>
+                    Admin
+                    <i class="fa fa-circle"></i>
+                </a>
+            </li>
+            <% } %>
+
+            <li>
+              <a id="newsfeed" href="/newsfeed">
+                  <i class="fa fa-files-o"></i>
+                    News Feed
+                    <i class="fa fa-circle"></i>
+                </a>
+            </li>
+
             <li>
             	<a href="/logout">
                     <i class="fa fa-envelope-o"></i>
@@ -93,11 +130,17 @@
     <div class="content">
          <div class="container-boxed boxed full-bottom">
             <h3>Announcement</h3>
-            <em id="announcement_metadata" class="small-subtitle">published by <%= announcement.User.username %> at <%= announcement.createdAt %></em>
-            <p id="announcement" class="no-bottom">
-                <%= announcement.content %>
-            </p>
+            <% if(announcement != null) {%>
+              <em id="announcement_metadata" class="small-subtitle">published by <%= announcement.User.username %> at <%= announcement.createdAt %></em>
+              <p id="announcement" class="no-bottom">
+                  <%= announcement.content %>
+              </p>
+            <% }else{ %>
+              <h4 id="announcement" ></h4>
+              <p id="announcement_metadata"></p>
+            <% } %>
          </div>
+
         
         <div id="notification"></div>
 
@@ -139,6 +182,9 @@
     <script src="js/socket.io-1.2.0.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+    <script src="js/jquery.blockUI.js"></script>
+    <script src="js/blockwhiletesting.js"></script>
+
     <script>
     $(document).ready(function() {
       var socket = io();
@@ -176,7 +222,8 @@
       });
 
       socket.on('chat message', function(data){
-        $('#messages').append("<div class=\"container-boxed boxed full-bottom\"><h3>"+data[0]+" </h3><em class=\"small-subtitle\">"+data[2]+"</em><p class=\"no-bottom\">"+data[1]+"</p></div>");
+        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
+        $('#messages').append($('<li>').text(data[1]));
       });
 
       socket.on('update userlist', function(userlist) {
@@ -213,7 +260,7 @@
           var login_username = $("#username").val();
 
           if( login_username == receiver ){
-            $("#notification").append("<div class=\"container-boxed boxed full-bottom\"><h3><a href=\"/chat?user="+sender+"\" style=\"color:red;\">You got a message from <Strong>"+sender+"</strong></a></h3></div>");
+            $("#userslist").prepend("<div><a href=\"/chat?user="+sender+"\" style=\"color:red;\">You got a message from <Strong>"+sender+"</strong></a></div>");
           }
 
       });
