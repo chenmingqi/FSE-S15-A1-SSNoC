@@ -32,14 +32,19 @@
 	<td>ccccc</td>
 </tr>
 <tr>
+	<td>click</td>
+	<td>id=signin</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>id=signin</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyElementPresent</td>
-	<td>css=strong</td>
-	<td>chenmingqi</td>
+	<td>clickAndWait</td>
+	<td>link=Log out</td>
+	<td></td>
 </tr>
 </tbody></table>
 </body>
