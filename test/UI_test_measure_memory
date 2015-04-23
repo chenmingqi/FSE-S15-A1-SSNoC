@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://localhost:3000/" />
+<link rel="selenium.base" href="http://localhost/" />
 <title>UI_test_measure_memory</title>
 </head>
 <body>
@@ -13,7 +13,37 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/measurememory</td>
+	<td>/home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Measure</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Measure Memory</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=test</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=test</td>
 	<td></td>
 </tr>
 <tr>
@@ -29,11 +59,6 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Back</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>link=Search</td>
 	<td></td>
 </tr>
 
