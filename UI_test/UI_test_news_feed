@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost/" />
+<title>UI_test_news_feed</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">UI_test_news_feed</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>sixonenine</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>SSNAdmin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=confirm</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=signin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=signin</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=newsfeed</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=fileUploaded</td>
+	<td>/Users/jack/Desktop/trello/男人狗温情.jpeg</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=words</td>
+	<td>It's a man and a dog.</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//input[@name='notify'])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=upload</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Reply</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=comment</td>
+	<td>it's a reply</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=input[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Log out</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
