@@ -9,15 +9,13 @@
 
 <link href="styles/style.css"     		 rel="stylesheet" type="text/css">
 <link href="styles/framework.css" 		 rel="stylesheet" type="text/css">
-<link href="styles/font-awesome.css"	 rel="stylesheet" type="text/css">
-
+<!-- <link href="styles/font-awesome.css"	 rel="stylesheet" type="text/css"> -->
 <script type="text/javascript" src="scripts/jquery.js"></script>
 <script type="text/javascript" src="scripts/jqueryui.js"></script>
 <script type="text/javascript" src="scripts/custom.js"></script>
 
 </head>
 <body>
-
 <input style="visibility:hidden;" value="<%= user.username %>" id="username">
 
 <!-- <div id="preloader">
@@ -28,7 +26,6 @@
         </p>
     </div>
 </div> -->
-
 
 <div class="header">
 	<h3 style="margin-top:20px; margin-left:40px;">Welcome!  <%= user.username %> </h3>
@@ -149,7 +146,7 @@
               <div id="online_users"></div>
             <h3>Offline users</h3>
               <div id="offline_users"></div>
-         </div>
+        </div>
 
         <div id="message_div">
           <ul id="messages_stored">
@@ -221,9 +218,13 @@
         $('#announcement_metadata').text("published by " + data[0] + " at " + data[2]);
       });
 
+      // socket.on('chat message', function(data){
+      //   $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
+      //   $('#messages').append($('<li>').text(data[1]));
+      // });
+
       socket.on('chat message', function(data){
-        $('#messages').append($('<li>').text(data[2] + ", " + data[0] + ":"));
-        $('#messages').append($('<li>').text(data[1]));
+        $('#messages').append("<div class=\"container-boxed boxed full-bottom\"> <h3>"+ data[0]+" </h3><em class=\"small-subtitle\">"+data[2]+"</em><p class=\"no-bottom\">"+data[1]+"</p></div>");
       });
 
       socket.on('update userlist', function(userlist) {

@@ -140,8 +140,8 @@ module.exports = function(io) {
         // console.log("Available:   "+split_result[13]);
 
         //get non-volatile memory
-        var diskTotal = split_result[11];
-        var diskUsed = split_result[12];
+        var diskTotal = split_result[7];
+        var diskUsed = split_result[8];
         if (error !== null) {
           console.log('exec error: ' + error);
         }
